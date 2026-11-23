@@ -1,0 +1,4 @@
+gpu-node-7:2203:2393 [3] NCCL INFO NCCL version 2.21.5+cuda12.4
+[rank11]:[E1114 10:04:20.060118123 ProcessGroupNCCL.cpp:632] [Rank 11] Watchdog caught collective operation timeout: WorkNCCL(SeqNum=48213, OpType=ALLREDUCE, NumelIn=8388608, NumelOut=8388608, Timeout(ms)=600000) ran for 600012 milliseconds before timing out.
+[rank11]:[E1114 10:04:20.060200000 ProcessGroupNCCL.cpp:2168] [PG ID 0 PG GUID 0(default_pg) Rank 11] Timeout at NCCL work: 48213, last enqueued NCCL work: 48213, last completed NCCL work: 48212.
+gpu-node-7:2203:2394 [3] NCCL WARN NET/IB : Got completion from peer 10.0.0.12<41723> with status=12 opcode=129 len=0 vendor err 129 (Recv) localGid ::ffff:10.0.0.11 remoteGids::ffff:10.0.0.12

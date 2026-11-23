@@ -1,0 +1,56 @@
+{
+  "schema": "golden-manifest/v1",
+  "cluster": "sim-a",
+  "description": "Golden manifest for the simulated fleet. Versions are what was qualified; numbers are placeholders of the right magnitude (see docs/THRESHOLDS.md), to be re-baselined on known-good nodes of your own fleet.",
+  "node_types": {
+    "hgx-h100-ndr": {
+      "vendor": "nvidia",
+      "gpu": {
+        "product": "NVIDIA H100 80GB HBM3",
+        "count": 8,
+        "vbios": ["96.00.99.00.01"],
+        "power_limit_w": 700,
+        "max_sm_clock_mhz": 1980,
+        "pcie_width": 16,
+        "pcie_gen": 5,
+        "persistence_required": true,
+        "nvswitch_fabric": true
+      },
+      "software": {"driver": "550.127.08", "runtime": "12.4", "kernel": "5.15.0-125-generic"},
+      "fabric": {"kind": "ib", "count": 8, "rate_gbps": 400, "firmware": "28.39.2048"},
+      "affinity": {"allowed": ["PIX", "PXB"]},
+      "scaleup": {"link": "NV", "min_links": 18},
+      "burnin": {"max_temp_c": 87, "max_throttle_s": 30, "min_gemm_tflops": 650},
+      "allreduce": {"single_node_min_busbw_gbps": 400, "multi_node_min_busbw_gbps": 340},
+      "pool": {"min_accepted_nodes": 20}
+    },
+    "mi300x-ndr": {
+      "vendor": "amd",
+      "gpu": {
+        "product": "AMD Instinct MI300X OAM",
+        "count": 8,
+        "vbios": ["113-M3000100-102"],
+        "power_limit_w": 750,
+        "pcie_width": 16,
+        "persistence_required": false,
+        "nvswitch_fabric": false
+      },
+      "software": {"driver": "6.8.5", "runtime": "6.2.4", "kernel": "5.15.0-125-generic"},
+      "fabric": {"kind": "ib", "count": 8, "rate_gbps": 400, "firmware": "28.39.2048"},
+      "affinity": {"allowed": ["PIX", "PXB", "NODE"]},
+      "scaleup": {"link": "XGMI"},
+      "burnin": {"max_temp_c": 95, "max_throttle_s": 30, "min_gemm_tflops": 1050},
+      "allreduce": {"single_node_min_busbw_gbps": 290, "multi_node_min_busbw_gbps": 300},
+      "pool": {"min_accepted_nodes": 3}
+    }
+  },
+  "thresholds": {
+    "ecc_max_uncorrectable_volatile": 0,
+    "ecc_max_correctable_volatile": 1000,
+    "idle_max_temp_c": 55,
+    "critical_xids": [48, 62, 63, 64, 74, 79, 92, 94, 95, 119, 120, 123],
+    "straggler_max_below_median_pct": 6.0,
+    "rack_correlation_min_nodes": 2,
+    "rack_correlation_min_fraction": 0.5
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "_comment": "Per-hop TTFT budgets for the platform path. A hop over budget names its owner: lb -> ingress/networking, sched_wait -> serving scheduler, prefill -> model/runtime.",
+  "ttft_ms": {"p99": 200},
+  "hops_ms": {
+    "lb": {"p99": 20},
+    "sched_wait": {"p99": 50},
+    "server_other": {"p99": 20}
+  }
+}

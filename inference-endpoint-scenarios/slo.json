@@ -1,0 +1,205 @@
+{
+  "mock": {
+    "decode_runs": 3,
+    "min_decode_tps": 1000,
+    "ttft_p50_max_s": 0.25,
+    "prefill_sizes": [
+      256,
+      1024,
+      4096
+    ],
+    "min_prefill_tps": 50000,
+    "cache_prefix_tokens": 2048,
+    "cache_gated": true,
+    "determinism_reps": 5,
+    "min_identical_rate": 1.0,
+    "max_logprob_drift": 1e-06,
+    "determinism_gated": true,
+    "concurrency_levels": [
+      1,
+      4,
+      8
+    ],
+    "requests_per_slot": 4,
+    "max_retry_ratio": 0.5,
+    "latency_floor_s": 0.05,
+    "max_latency_inflation": 4.0,
+    "isolation_requests": 8,
+    "release_reps": 2,
+    "min_golden_pass_rate": 1.0,
+    "max_requests": 800,
+    "wire_equiv_tokens": 12000,
+    "wire_size_tokens": [
+      0,
+      1000,
+      8000,
+      30000
+    ],
+    "wire_ttft_tokens": 16000,
+    "wire_reps": 3,
+    "wire_answer_gated": true,
+    "wire_ttft_gated": true,
+    "agent_reps": 2,
+    "agent_max_turns": 6,
+    "agent_loop_p50_max_s": 1.0,
+    "conv_turns": 8,
+    "longctx_tokens_tolerance": 0.9,
+    "gist_pages": 8,
+    "gist_page_tokens": 300,
+    "gist_target_page": 6,
+    "compat_answer_gated": true,
+    "conv_cache_gated": true,
+    "needle_grid": [
+      [
+        4000,
+        0.5
+      ],
+      [
+        16000,
+        0.1
+      ],
+      [
+        16000,
+        0.5
+      ],
+      [
+        32000,
+        0.5
+      ],
+      [
+        32000,
+        0.9
+      ]
+    ],
+    "conv_uncached_share_max": 0.25,
+    "reasoning_models": [
+      "qwen-3.8-27b",
+      "gpt-oss-120b",
+      "gemma-4-31b"
+    ],
+    "reasoning_levels": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "reasoning_max_tokens": 512,
+    "schema_max_samples": 400,
+    "invariance_rounds": 2,
+    "invariance_load": 7,
+    "invariance_gated": true,
+    "refill_wait_s": 1.0,
+    "refill_gated": true,
+    "soak_seconds": 3,
+    "soak_rps": 20,
+    "soak_windows": 3,
+    "soak_creep_cap": 3.0,
+    "bench_items": 50,
+    "bench_max_tokens": 400,
+    "bench_concurrency": 8,
+    "bench_nogo_alpha": 0.01,
+    "bench_go_alpha": 0.1
+  },
+  "live": {
+    "_comment": "Provisional thresholds, calibrated from the first live runs; see docs/STRATEGY.md. Determinism and cache are reported, not gated: the API documents seed as best-effort and caching as automatic.",
+    "decode_runs": 5,
+    "min_decode_tps": 500,
+    "ttft_p50_max_s": 1.0,
+    "prefill_sizes": [
+      256,
+      1024,
+      4096
+    ],
+    "min_prefill_tps": 5000,
+    "cache_prefix_tokens": 2048,
+    "cache_gated": false,
+    "determinism_reps": 5,
+    "min_identical_rate": 0.8,
+    "max_logprob_drift": 0.05,
+    "determinism_gated": false,
+    "concurrency_levels": [
+      1,
+      4,
+      8
+    ],
+    "requests_per_slot": 2,
+    "max_retry_ratio": 0.25,
+    "latency_floor_s": 0.2,
+    "max_latency_inflation": 4.0,
+    "isolation_requests": 8,
+    "release_reps": 2,
+    "min_golden_pass_rate": 0.85,
+    "max_requests": 800,
+    "wire_equiv_tokens": 12000,
+    "wire_size_tokens": [
+      0,
+      1000,
+      8000,
+      30000
+    ],
+    "wire_ttft_tokens": 16000,
+    "wire_reps": 3,
+    "wire_answer_gated": false,
+    "wire_ttft_gated": false,
+    "agent_reps": 2,
+    "agent_max_turns": 6,
+    "agent_loop_p50_max_s": 10.0,
+    "conv_turns": 8,
+    "longctx_tokens_tolerance": 0.9,
+    "gist_pages": 8,
+    "gist_page_tokens": 300,
+    "gist_target_page": 6,
+    "compat_answer_gated": false,
+    "conv_cache_gated": false,
+    "needle_grid": [
+      [
+        4000,
+        0.5
+      ],
+      [
+        12000,
+        0.5
+      ],
+      [
+        24000,
+        0.1
+      ],
+      [
+        24000,
+        0.5
+      ],
+      [
+        24000,
+        0.9
+      ]
+    ],
+    "conv_uncached_share_max": 0.25,
+    "reasoning_models": [
+      "qwen-3.8-27b",
+      "gpt-oss-120b",
+      "gemma-4-31b"
+    ],
+    "reasoning_levels": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "reasoning_max_tokens": 1024,
+    "schema_max_samples": 400,
+    "invariance_rounds": 2,
+    "invariance_load": 7,
+    "invariance_gated": false,
+    "refill_wait_s": 10.0,
+    "refill_gated": false,
+    "soak_seconds": 300,
+    "soak_rps": 1,
+    "soak_windows": 5,
+    "soak_creep_cap": 2.0,
+    "bench_items": 50,
+    "bench_max_tokens": 512,
+    "bench_concurrency": 4,
+    "bench_nogo_alpha": 0.01,
+    "bench_go_alpha": 0.1
+  }
+}

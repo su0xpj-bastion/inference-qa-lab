@@ -1,0 +1,18 @@
+Infiniband device 'mlx5_0' port 1 status:
+	default gid:	 fe80:0000:0000:0000:a088:c203:00f1:c3d0
+	base lid:	 0x19c
+	sm lid:		 0x1
+	state:		 4: ACTIVE
+	phys state:	 5: LinkUp
+	rate:		 400 Gb/sec (4X NDR)
+	link_layer:	 InfiniBand
+
+Infiniband device 'mlx5_1' port 1 status:
+	default gid:	 fe80:0000:0000:0000:a088:c203:00f1:c3d8
+	base lid:	 0x19d
+	sm lid:		 0x1
+	state:		 4: ACTIVE
+	phys state:	 5: LinkUp
+	rate:		 200 Gb/sec (2X NDR)
+	link_layer:	 InfiniBand
+

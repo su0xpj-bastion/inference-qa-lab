@@ -1,0 +1,18 @@
+provider: efa
+    fabric: efa
+    domain: rdmap16s27-rdm
+    version: 122.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_EFA
+provider: efa
+    fabric: efa
+    domain: rdmap16s27-dgrm
+    version: 122.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_EFA
+provider: efa
+    fabric: efa
+    domain: rdmap32s27-rdm
+    version: 122.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_EFA

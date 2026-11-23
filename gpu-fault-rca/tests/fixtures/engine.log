@@ -1,0 +1,4 @@
+INFO 11-14 10:00:05 [api_server.py:1024] Starting vLLM API server on http://0.0.0.0:8000
+ERROR 11-14 10:09:31 [engine.py:160] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.00 GiB. GPU 4 has a total capacity of 79.10 GiB of which 512.00 MiB is free. Process 2201 has 78.60 GiB memory in use.
+ERROR 11-14 10:11:02.513 [model_runner.py:1688] RuntimeError: CUDA error: an illegal memory access was encountered
+ERROR 11-14 10:12:00 [cuda.py:118] RuntimeError: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 803: system has unsupported display driver / cuda driver combination

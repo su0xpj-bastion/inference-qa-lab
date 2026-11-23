@@ -1,0 +1,4 @@
+10.0.9.17 - - [14/Nov/2026:10:03:12 +0000] "POST /v1/chat/completions HTTP/1.1" 200 1843 "-" "openai-python/1.109.1" rt=0.912 urt=0.910 ups=replica-a req=8f3a0001
+10.0.9.17 - - [14/Nov/2026:11:03:13 +0100] "POST /v1/chat/completions HTTP/1.1" 504 150 "-" "curl/8.5.0" rt=30.000 urt=30.000 ups=replica-b req=8f3a0002
+10.0.9.17 - - [14/Nov/2026:10:03:14 +0000] "POST /v1/chat/completions HTTP/1.1" 503 150 "-" "openai-python/1.109.1" rt=0.001 urt=- ups=- req=8f3a0003
+this line is garbage and must be skipped

@@ -1,0 +1,179 @@
+# One NetworkAttachmentDefinition per RoCE rail. Each pulls a VF from its own SR-IOV
+# device-plugin pool (nvidia.com/rail<N>_vf, configured by the NVIDIA Network Operator's
+# SriovNetworkNodePolicy), so pod net<N+1> always sits on physical rail N. Rails are separate
+# L3 subnets (10.10<N>.0.0/16) in a rail-optimized fabric; whereabouts hands out pod IPs.
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail0
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail0_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail0",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.100.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail1
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail1_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail1",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.101.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail2
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail2_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail2",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.102.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail3
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail3_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail3",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.103.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail4
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail4_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail4",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.104.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail5
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail5_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail5",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.105.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail6
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail6_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail6",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.106.0.0/16"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: roce-rail7
+  namespace: fabric-validation
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: nvidia.com/rail7_vf
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "roce-rail7",
+      "type": "sriov",
+      "vlan": 0,
+      "spoofchk": "off",
+      "trust": "on",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.107.0.0/16"
+      }
+    }

@@ -1,0 +1,72 @@
+name: gpu-testkit
+on:
+  pull_request:
+    paths: ["gpu-testkit/**", ".github/workflows/gpu-testkit.yml"]
+  push: {branches: [main], paths: ["gpu-testkit/**", ".github/workflows/gpu-testkit.yml"]}
+
+defaults:
+  run:
+    working-directory: gpu-testkit
+concurrency:
+  group: gpu-testkit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: ruff + mypy --strict
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-testkit/pyproject.toml}
+      - run: python -m venv .venv && .venv/bin/pip install -e '.[dev]'
+      - run: .venv/bin/ruff check src tests examples
+      - run: .venv/bin/ruff format --check src tests examples
+      - run: .venv/bin/mypy
+
+  framework:
+    name: framework tests (py${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix: {python: ["3.12", "3.13"]}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "${{ matrix.python }}", cache: pip, cache-dependency-path: gpu-testkit/pyproject.toml}
+      - run: python -m venv .venv && .venv/bin/pip install -e '.[dev]'
+      - run: .venv/bin/python -m pytest --junitxml=reports/junit-framework.xml
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: "framework-reports-py${{ matrix.python }}", path: gpu-testkit/reports/}
+
+  example-suite:
+    name: example GPU suite (fake 8x H100, 4 workers)
+    needs: framework
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GPU_TESTKIT_FAKE_SPEC: h100x8
+      GPU_TESTKIT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-testkit/pyproject.toml}
+      - run: python -m venv .venv && .venv/bin/pip install -e '.[dev]'
+      - run: .venv/bin/gpu-testkit hw
+      - run: .venv/bin/gpu-testkit quarantine examples/llm_serving_suite/quarantine.toml --fail-on-expired
+      - name: example suite
+        run: >
+          .venv/bin/python -m pytest examples/llm_serving_suite -n 4 -rs
+          --gpu-results=reports/example-results.jsonl --junitxml=reports/example-junit.xml
+      - name: diff vs baseline -> job summary (gates on new failures)
+        if: always()
+        run: >
+          .venv/bin/gpu-testkit report reports/example-results.jsonl
+          --base examples/llm_serving_suite/baseline.jsonl
+          --output "$GITHUB_STEP_SUMMARY" --fail-on-new
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: example-reports, path: gpu-testkit/reports/}

@@ -1,0 +1,10 @@
+[
+  {"id": "math_mul", "check": "exact", "prompt": "What is 17 * 23? Reply with only the number.", "expect": "391"},
+  {"id": "math_add", "check": "exact", "prompt": "What is 4821 + 1379? Reply with only the number.", "expect": "6200"},
+  {"id": "prime", "check": "exact", "prompt": "Is 97 a prime number? Answer with only yes or no.", "expect": "yes"},
+  {"id": "sort", "check": "list", "prompt": "Sort these numbers ascending, comma separated, output only the list: 42, 7, 19, 3, 88", "expect": [3, 7, 19, 42, 88]},
+  {"id": "capital", "check": "contains", "prompt": "What is the capital of Australia? Reply with only the city name.", "expect": "Canberra"},
+  {"id": "repeat", "check": "exact", "prompt": "Repeat exactly: Wafer scale inference is fast.", "expect": "Wafer scale inference is fast."},
+  {"id": "extract_json", "check": "json", "prompt": "Extract the person: 'Maria is 34 years old and lives in Lisbon.'", "expect": {"name": "Maria", "age": 34}, "max_tokens": 64},
+  {"id": "tool_args", "check": "tool", "prompt": "What's the weather in Berlin?", "expect": {"name": "get_weather", "city": "Berlin"}, "max_tokens": 64}
+]

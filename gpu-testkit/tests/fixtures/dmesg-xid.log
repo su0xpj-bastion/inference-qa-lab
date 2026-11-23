@@ -1,0 +1,7 @@
+[    4.112233] nvidia: loading out-of-tree module taints kernel.
+[    5.001122] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  560.35.03
+[ 8812.553210] NVRM: Xid (PCI:0000:3b:00): 31, pid=48211, name=python3, Ch 00000010, intr 00000000. MMU Fault: ENGINE GRAPHICS GPCCLIENT_T1_0 faulted @ 0x7f3a_4c000000. Fault is of type FAULT_PDE ACCESS_TYPE_VIRT_READ
+[ 9174.162839] NVRM: Xid (PCI:0000:5e:00): 79, pid=0, GPU has fallen off the bus.
+[ 9174.162901] NVRM: GPU 0000:5e:00.0: GPU has fallen off the bus.
+[ 9301.000017] NVRM: Xid (PCI:0000:86:00): 74, pid='<unknown>', name=<unknown>, NVLink: fatal error detected on link 3(0x10000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+[ 9402.777000] NVRM: Xid (PCI:0000:af:00): 94, pid=51200, name=python3, Contained: SM (0x1). RST: No, D-RST: No

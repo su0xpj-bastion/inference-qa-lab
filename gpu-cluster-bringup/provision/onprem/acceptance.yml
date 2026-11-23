@@ -1,0 +1,57 @@
+---
+# Validation hook: run after site.yml. Captures evidence on every node, pulls it
+# to the controller, and runs the staged acceptance pipeline over the whole fleet
+# (node -> burn-in -> NVLink/rack domain -> cluster). The play fails (non-zero)
+# if the cluster is REJECTED; ACCEPTED_DEGRADED passes with a cordon list.
+- name: Capture acceptance evidence
+  hosts: gpu
+  become: true
+  serial: "{{ rack_batch | default('100%') }}"
+  tasks:
+    - name: Run collect.sh (includes dcgmi diag -r 3 / RVS and burn-in)
+      ansible.builtin.command:
+        argv:
+          - "{{ bringup_root }}/scripts/collect.sh"
+          - "{{ bringup_captures }}"
+          - "{{ group_names | select('match', '^rack_') | first | regex_replace('^rack_', '') }}"
+          - "{{ node_type }}"
+          - "{{ burnin_seconds }}"
+      changed_when: true
+    - name: Find capture files
+      ansible.builtin.find:
+        paths: "{{ bringup_captures }}"
+      register: captures
+    - name: Fetch captures to controller
+      ansible.builtin.fetch:
+        src: "{{ item.path }}"
+        dest: "{{ bringup_controller_results }}/{{ inventory_hostname }}/"
+        flat: true
+      loop: "{{ captures.files }}"
+
+- name: Fleet acceptance on the controller
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Run the staged pipeline
+      ansible.builtin.command:
+        argv:
+          - python3
+          - -m
+          - bringup
+          - run
+          - --fleet
+          - "{{ bringup_controller_results }}"
+          - --manifest
+          - "{{ playbook_dir }}/../../manifests/golden.json"
+          - --out
+          - "{{ playbook_dir }}/../../reports/onprem"
+          - --runner
+          - nccl
+        chdir: "{{ playbook_dir }}/../.."
+      register: bringup
+      changed_when: false
+      failed_when: bringup.rc not in [0, 3]
+    - name: Show verdict
+      ansible.builtin.debug:
+        var: bringup.stdout_lines

@@ -1,0 +1,76 @@
+{
+  "schema": "golden-manifest/v1",
+  "cluster": "aws-p5",
+  "description": "Golden manifest for the AWS p5.48xlarge node group in provision/aws-p5. EFA has no ibstat port view, so the fabric gate checks EFA device count from fi_info. Versions are those of the pinned DLAMI; re-baseline when the AMI changes.",
+  "node_types": {
+    "aws-p5-efa": {
+      "vendor": "nvidia",
+      "gpu": {
+        "product": "NVIDIA H100 80GB HBM3",
+        "count": 8,
+        "vbios": [
+          "96.00.99.00.01"
+        ],
+        "power_limit_w": 700,
+        "max_sm_clock_mhz": 1980,
+        "pcie_width": 16,
+        "pcie_gen": 5,
+        "persistence_required": true,
+        "nvswitch_fabric": true
+      },
+      "software": {
+        "driver": "550.127.08",
+        "runtime": "12.4",
+        "kernel": "5.15.0-125-generic"
+      },
+      "fabric": {
+        "kind": "efa",
+        "count": 32
+      },
+      "affinity": {
+        "allowed": [
+          "PIX",
+          "PXB"
+        ]
+      },
+      "scaleup": {
+        "link": "NV",
+        "min_links": 18
+      },
+      "burnin": {
+        "max_temp_c": 87,
+        "max_throttle_s": 30,
+        "min_gemm_tflops": 650
+      },
+      "allreduce": {
+        "single_node_min_busbw_gbps": 400,
+        "multi_node_min_busbw_gbps": 300
+      },
+      "pool": {
+        "min_accepted_nodes": 3
+      }
+    }
+  },
+  "thresholds": {
+    "ecc_max_uncorrectable_volatile": 0,
+    "ecc_max_correctable_volatile": 1000,
+    "idle_max_temp_c": 55,
+    "critical_xids": [
+      48,
+      62,
+      63,
+      64,
+      74,
+      79,
+      92,
+      94,
+      95,
+      119,
+      120,
+      123
+    ],
+    "straggler_max_below_median_pct": 6.0,
+    "rack_correlation_min_nodes": 2,
+    "rack_correlation_min_fraction": 0.5
+  }
+}

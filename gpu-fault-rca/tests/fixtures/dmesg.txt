@@ -1,0 +1,3 @@
+[    4.112233] nvidia-nvlink: Nvlink Core is being initialized, major device number 509
+[ 1234.567890] NVRM: Xid (PCI:0000:5d:00): 74, pid=3301, name=python3, NVLink: fatal error detected on link 3(0x0, 0x0, 0x10000, 0x0, 0x0, 0x0, 0x0)
+[ 1240.000001] NVRM: Xid (PCI:0000:18:00): 13, 3301 Graphics Exception: ChID 0010, Class 0000c7c0, Offset 00000000, Data 00000000

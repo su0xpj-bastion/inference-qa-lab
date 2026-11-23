@@ -1,0 +1,73 @@
+name: gpu-fabric-validation
+on:
+  pull_request:
+    paths: ["gpu-fabric-validation/**", ".github/workflows/gpu-fabric-validation.yml"]
+  push: {branches: [main], paths: ["gpu-fabric-validation/**", ".github/workflows/gpu-fabric-validation.yml"]}
+
+defaults:
+  run:
+    working-directory: gpu-fabric-validation
+concurrency:
+  group: gpu-fabric-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  KUBECONFORM_VERSION: v0.8.0
+  KUBERAY_VERSION: v1.7.2
+
+jobs:
+  tests:
+    name: parsers, model, localization, e2e faults
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-fabric-validation/requirements.txt}
+      - run: pip install -r requirements.txt
+      - run: python -m pytest --junitxml=reports/junit.xml
+      - name: sample fabric report (8 nodes, 5 injected faults; exit 1 expected)
+        run: |
+          python -m fabval simulate --nodes 8 --fault downtrain:node-03:2 --fault pfc:node-05:4 \
+            --fault numa:node-02:6 --fault gid:node-07 --fault corrupt:node-04 --seed ${{ github.run_number }} --out runs/demo
+          rc=0; python -m fabval analyze runs/demo --quiet --md reports/fabric.md --json reports/fabric.json || rc=$?
+          test "$rc" -eq 1
+          cat reports/fabric.md >> "$GITHUB_STEP_SUMMARY"
+      - name: healthy cluster must pass (exit 0)
+        run: |
+          python -m fabval simulate --nodes 8 --node-type h100-sxm-8x-ndr400-ib --seed ${{ github.run_number }} --out runs/healthy
+          python -m fabval analyze runs/healthy --quiet
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: reports, path: gpu-fabric-validation/reports/}
+
+  manifests:
+    name: manifests (yamllint, kubeconform, shellcheck)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-fabric-validation/requirements.txt}
+      - run: pip install -r requirements.txt
+      - run: yamllint .
+      - run: shellcheck launch/slurm/*.sh launch/slurm/*.sbatch launch/ray/*.sh scripts/*.sh
+      - name: install kubeconform
+        run: |
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" \
+            | tar -xz -C /usr/local/bin kubeconform
+          kubeconform -v
+      - name: RayCluster schema from the KubeRay CRD (not in the CRDs catalog)
+        run: |
+          mkdir -p schemas && cd schemas
+          curl -fsSLO "https://raw.githubusercontent.com/ray-project/kuberay/${KUBERAY_VERSION}/ray-operator/config/crd/bases/ray.io_rayclusters.yaml"
+          curl -fsSLO "https://raw.githubusercontent.com/yannh/kubeconform/${KUBECONFORM_VERSION}/scripts/openapi2jsonschema.py"
+          FILENAME_FORMAT='{kind}_{version}' python openapi2jsonschema.py ray.io_rayclusters.yaml
+          ls
+      - name: kubeconform (strict; a missing schema is a failure)
+        run: |
+          kubeconform -strict -summary -output pretty -kubernetes-version 1.31.0 \
+            -schema-location default \
+            -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            -schema-location 'schemas/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            launch/k8s launch/ray/raycluster.yaml

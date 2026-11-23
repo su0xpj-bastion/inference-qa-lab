@@ -1,0 +1,8 @@
+2026-11-14T09:58:01.000101+00:00 gpu-node-7 kernel: NVRM: loading NVIDIA UNIX x86_64 Kernel Module  550.90.07  Release Build  (dvs-builder@U16-I3-B03-4-3)
+2026-11-14T10:03:12.481920+00:00 gpu-node-7 kernel: NVRM: Xid (PCI:0000:3a:00): 79, pid='<unknown>', name=<unknown>, GPU has fallen off the bus.
+2026-11-14T10:03:12.482001+00:00 gpu-node-7 kernel: NVRM: GPU 0000:3a:00.0: GPU has fallen off the bus.
+2026-11-14T10:04:40.100000+00:00 gpu-node-7 kernel: NVRM: Xid (PCI:0000:9a:00): 94, pid=2214, name=python3, Contained: SM (0x1). RST: No, D-RST: No
+2026-11-14T10:04:40.100300+00:00 gpu-node-7 kernel: NVRM: Xid (PCI:0000:9a:00): 63, pid=2214, name=python3, Row Remapper: New row (0x00000000000a3f20) Marked for Remapping, reset gpu to activate.
+2026-11-14T10:05:00.000000+00:00 gpu-node-7 kernel: NVRM: API mismatch: the client has the version 560.35.03, but
+2026-11-14T10:05:00.000000+00:00 gpu-node-7 kernel: NVRM: this kernel module has the version 550.90.07.  Please
+2026-11-14T10:06:00.000000+00:00 gpu-node-7 kernel: watchdog: BUG: soft lockup - CPU#12 stuck for 23s! [python3:4412]

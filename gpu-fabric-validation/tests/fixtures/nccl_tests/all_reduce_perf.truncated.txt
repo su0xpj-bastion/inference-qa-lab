@@ -1,0 +1,27 @@
+# nThread 1 nGpus 1 minBytes 8 maxBytes 8589934592 step: 2(factor) warmup iters: 5 iters: 20 agg iters: 1 validation: 1 graph: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid  40000 on     gpu-a1 device  0 [0x18] NVIDIA H100 80GB HBM3
+#  Rank  1 Group  0 Pid  40007 on     gpu-a1 device  1 [0x2a] NVIDIA H100 80GB HBM3
+#  Rank  2 Group  0 Pid  40014 on     gpu-a1 device  2 [0x3a] NVIDIA H100 80GB HBM3
+#  Rank  3 Group  0 Pid  40021 on     gpu-a1 device  3 [0x5d] NVIDIA H100 80GB HBM3
+#  Rank  4 Group  0 Pid  40028 on     gpu-a1 device  4 [0x9a] NVIDIA H100 80GB HBM3
+#  Rank  5 Group  0 Pid  40035 on     gpu-a1 device  5 [0xab] NVIDIA H100 80GB HBM3
+#  Rank  6 Group  0 Pid  40042 on     gpu-a1 device  6 [0xba] NVIDIA H100 80GB HBM3
+#  Rank  7 Group  0 Pid  40049 on     gpu-a1 device  7 [0xdb] NVIDIA H100 80GB HBM3
+#  Rank  8 Group  0 Pid  40056 on     gpu-a2 device  0 [0x18] NVIDIA H100 80GB HBM3
+#  Rank  9 Group  0 Pid  40063 on     gpu-a2 device  1 [0x2a] NVIDIA H100 80GB HBM3
+#  Rank 10 Group  0 Pid  40070 on     gpu-a2 device  2 [0x3a] NVIDIA H100 80GB HBM3
+#  Rank 11 Group  0 Pid  40077 on     gpu-a2 device  3 [0x5d] NVIDIA H100 80GB HBM3
+#  Rank 12 Group  0 Pid  40084 on     gpu-a2 device  4 [0x9a] NVIDIA H100 80GB HBM3
+#  Rank 13 Group  0 Pid  40091 on     gpu-a2 device  5 [0xab] NVIDIA H100 80GB HBM3
+#  Rank 14 Group  0 Pid  40098 on     gpu-a2 device  6 [0xba] NVIDIA H100 80GB HBM3
+#  Rank 15 Group  0 Pid  40105 on     gpu-a2 device  7 [0xdb] NVIDIA H100 80GB HBM3
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw #wrong     time   algbw   busbw #wrong
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)            (us)  (GB/s)  (GB/s)       
+           8             2     float     sum      -1    31.00    0.00    0.00      0    30.26    0.00    0.00      0
+          16             4     float     sum      -1    31.11    0.00    0.00      0    31.43    0.00    0.00      0
+          32             8     float     sum      -1    31.16    0.00    0.00      0    30.28    0.00    0.00      0
+gpu-a2: Test NCCL failure common.cu:1005 'remote process exited or there was a network error / '

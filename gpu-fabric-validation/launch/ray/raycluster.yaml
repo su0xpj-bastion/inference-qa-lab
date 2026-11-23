@@ -1,0 +1,118 @@
+# KubeRay RayCluster for the Ray launch path: same nodes, same RDMA plumbing and the same
+# nccl-env-roce ConfigMap as the MPIJob. Unlike MPI-over-ssh, Ray workers are forked by the
+# raylet inside the container, so envFrom on the container does reach every actor.
+apiVersion: ray.io/v1
+kind: RayCluster
+metadata:
+  name: fabric-ray
+  namespace: fabric-validation
+  labels:
+    kueue.x-k8s.io/queue-name: gpu-validation
+spec:
+  rayVersion: "2.40.0"
+  headGroupSpec:
+    rayStartParams:
+      dashboard-host: "0.0.0.0"
+      num-gpus: "0"
+    template:
+      spec:
+        containers:
+          - name: ray-head
+            image: registry.example.com/fabric/ray-nccl:2.40.0-cuda12.6
+            ports:
+              - containerPort: 6379
+                name: gcs
+              - containerPort: 8265
+                name: dashboard
+              - containerPort: 10001
+                name: client
+            resources:
+              requests: {cpu: "8", memory: 32Gi}
+              limits: {cpu: "8", memory: 32Gi}
+  workerGroupSpecs:
+    - groupName: h100-roce
+      replicas: 8
+      minReplicas: 8
+      maxReplicas: 8
+      rayStartParams:
+        num-gpus: "8"
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: ray-nccl
+            app.kubernetes.io/component: worker
+          annotations:
+            k8s.v1.cni.cncf.io/networks: roce-rail0,roce-rail1,roce-rail2,roce-rail3,roce-rail4,roce-rail5,roce-rail6,roce-rail7
+            kueue.x-k8s.io/podset-preferred-topology: network.topology.example.com/leaf-block
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: nvidia.com/gpu.product
+                        operator: In
+                        values: ["NVIDIA-H100-80GB-HBM3"]
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: ray-nccl
+                      app.kubernetes.io/component: worker
+                  topologyKey: kubernetes.io/hostname
+          tolerations:
+            - key: nvidia.com/gpu
+              operator: Exists
+              effect: NoSchedule
+          containers:
+            - name: ray-worker
+              image: registry.example.com/fabric/ray-nccl:2.40.0-cuda12.6
+              envFrom:
+                - configMapRef:
+                    name: nccl-env-roce
+              env:
+                - name: NCCL_SOCKET_IFNAME
+                  value: eth0
+              securityContext:
+                capabilities:
+                  add: ["IPC_LOCK"]
+              resources:
+                requests:
+                  cpu: "96"
+                  memory: 512Gi
+                  hugepages-2Mi: 2Gi
+                  nvidia.com/gpu: 8
+                  nvidia.com/rail0_vf: 1
+                  nvidia.com/rail1_vf: 1
+                  nvidia.com/rail2_vf: 1
+                  nvidia.com/rail3_vf: 1
+                  nvidia.com/rail4_vf: 1
+                  nvidia.com/rail5_vf: 1
+                  nvidia.com/rail6_vf: 1
+                  nvidia.com/rail7_vf: 1
+                limits:
+                  cpu: "96"
+                  memory: 512Gi
+                  hugepages-2Mi: 2Gi
+                  nvidia.com/gpu: 8
+                  nvidia.com/rail0_vf: 1
+                  nvidia.com/rail1_vf: 1
+                  nvidia.com/rail2_vf: 1
+                  nvidia.com/rail3_vf: 1
+                  nvidia.com/rail4_vf: 1
+                  nvidia.com/rail5_vf: 1
+                  nvidia.com/rail6_vf: 1
+                  nvidia.com/rail7_vf: 1
+              volumeMounts:
+                - name: dshm
+                  mountPath: /dev/shm
+                - name: hugepages
+                  mountPath: /hugepages
+          volumes:
+            - name: dshm
+              emptyDir:
+                medium: Memory
+                sizeLimit: 64Gi
+            - name: hugepages
+              emptyDir:
+                medium: HugePages-2Mi

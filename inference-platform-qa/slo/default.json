@@ -1,0 +1,8 @@
+{
+  "_comment": "Release gate for the inference platform path (client -> ingress -> service -> pod). Latency limits are for the mock testbed; tighten per model for real hardware.",
+  "max_error_rate": 0.01,
+  "ttft_s": {"p50": 0.25, "p99": 1.0},
+  "tbt_s": {"p99": 0.05},
+  "min_output_tps_p50": 50,
+  "min_replicas_serving": 2
+}

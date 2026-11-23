@@ -1,0 +1,30 @@
+07:00.0 3D controller: NVIDIA Corporation GA100 [A100 SXM4 80GB] (rev a1)
+	Subsystem: NVIDIA Corporation Device 1463
+	Physical Slot: 2
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+ Stepping- SERR+ FastB2B- DisINTx+
+	Latency: 0
+	Interrupt: pin A routed to IRQ 46
+	NUMA node: 3
+	IOMMU group: 31
+	Region 0: Memory at e2000000 (32-bit, non-prefetchable) [size=16M]
+	Capabilities: [60] Power Management version 3
+	Capabilities: [78] Express (v2) Endpoint, MSI 00
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 <64us
+		LnkCap:	Port #0, Speed 16GT/s, Width x16, ASPM not supported
+			ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 16GT/s (ok), Width x16 (ok)
+			TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+	Kernel driver in use: nvidia
+
+0000:0f:00.0 3D controller: NVIDIA Corporation GA100 [A100 SXM4 80GB] (rev ff)
+	!!! Unknown header type 7f
+	Kernel driver in use: nvidia
+
+c4:00.0 Infiniband controller: Mellanox Technologies MT28908 Family [ConnectX-6]
+	Subsystem: Mellanox Technologies Device 0007
+	NUMA node: 1
+	Capabilities: [60] Express (v2) Endpoint, MSI 00
+		LnkCap:	Port #0, Speed 16GT/s, Width x16, ASPM not supported
+		LnkSta:	Speed 8GT/s (downgraded), Width x8 (downgraded)
+	Kernel driver in use: mlx5_core

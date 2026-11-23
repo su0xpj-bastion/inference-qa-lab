@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fabric-validation
+  labels:
+    pod-security.kubernetes.io/enforce: privileged  # IPC_LOCK + SR-IOV devices

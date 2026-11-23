@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference
+  labels: {app: inference}
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}   # never drop below capacity mid-rollout
+  selector:
+    matchLabels: {app: inference}
+  template:
+    metadata:
+      labels: {app: inference}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+    spec:
+      terminationGracePeriodSeconds: 30
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: {matchLabels: {app: inference}}
+      containers:
+        - name: server
+          image: inference-mock:dev
+          imagePullPolicy: IfNotPresent
+          ports: [{name: http, containerPort: 8000}]
+          env:
+            - name: REPLICA_ID
+              valueFrom: {fieldRef: {fieldPath: metadata.name}}
+            # Budget (must stay < terminationGracePeriodSeconds 30):
+            #   preStop 5s + keep-accepting 10s + in-flight drain up to 10s = 25s
+            - {name: MOCKSERVE_DRAIN_GRACE_S, value: "10"}
+            - {name: MOCKSERVE_DRAIN_S, value: "10"}
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            periodSeconds: 2
+            failureThreshold: 1
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 10
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              # Endpoints removal and SIGTERM race. Sleep so kube-proxy / ingress-nginx
+              # drop the pod from rotation before it starts refusing new requests.
+              sleep: {seconds: 5}
+          resources:
+            requests: {cpu: 100m, memory: 64Mi}
+            limits: {memory: 128Mi}
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false

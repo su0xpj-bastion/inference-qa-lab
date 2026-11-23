@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+fleet/
+reports/
+results/
+.terraform/
+.terraform.lock.hcl
+*.tfstate*
+.DS_Store

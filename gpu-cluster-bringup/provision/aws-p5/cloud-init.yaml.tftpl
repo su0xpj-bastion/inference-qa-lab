@@ -1,0 +1,33 @@
+#cloud-config
+# Rendered by Terraform templatefile(). Runs once at first boot of a p5 node.
+package_update: false
+write_files:
+  - path: /etc/bringup/env
+    permissions: "0644"
+    content: |
+      CLUSTER=${cluster_name}
+      NODE_TYPE=${node_type}
+      MANIFEST_S3=${manifest_s3}
+      RESULTS_S3=${results_s3}
+  - path: /usr/local/sbin/bringup-hook
+    permissions: "0755"
+    content: |
+      #!/usr/bin/env bash
+      # Node-local acceptance: node + domain stages (minutes). Burn-in runs later.
+      set -euo pipefail
+      . /etc/bringup/env
+      token=$(curl -sX PUT http://169.254.169.254/latest/api/token -H 'X-aws-ec2-metadata-token-ttl-seconds: 300')
+      iid=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/instance-id)
+      az=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+      cap=/var/lib/bringup/captures
+      aws s3 cp "$MANIFEST_S3" /etc/bringup/golden.json
+      /opt/bringup/scripts/collect.sh "$cap" "$az" "$NODE_TYPE" 0
+      status=accepted
+      /opt/bringup/.venv/bin/python -m bringup node --captures "$cap" --manifest /etc/bringup/golden.json \
+          --stage node --stage domain --json "$cap/verdict.json" || status=cordoned
+      aws s3 cp --recursive "$cap" "$RESULTS_S3/$iid/"
+      aws ec2 create-tags --resources "$iid" --tags Key=bringup,Value="$status"
+runcmd:
+  - [bash, -c, "git clone --depth 1 https://github.com/su0xpj-bastion/inference-qa-lab /opt/inference-qa-lab && ln -s /opt/inference-qa-lab/gpu-cluster-bringup /opt/bringup && python3 -m venv /opt/bringup/.venv && /opt/bringup/.venv/bin/pip install -q -r /opt/bringup/requirements.txt"]
+  - [systemctl, enable, --now, nvidia-persistenced]
+  - [bash, -c, "/usr/local/sbin/bringup-hook > /var/log/bringup-hook.log 2>&1"]

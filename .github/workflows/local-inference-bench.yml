@@ -1,0 +1,37 @@
+name: local-inference-bench
+on:
+  push:
+    paths: ["local-inference-bench/**", ".github/workflows/local-inference-bench.yml"]
+  pull_request:
+    paths: ["local-inference-bench/**", ".github/workflows/local-inference-bench.yml"]
+defaults:
+  run:
+    working-directory: local-inference-bench
+jobs:
+  mock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: tests (healthy engine + every fault pinned)
+        run: python -m pytest -v
+      - name: healthy run, report to job summary
+        run: python -m localbench run --target mock --out reports/healthy
+      - name: faulted run must fail
+        run: |
+          if python -m localbench run --target mock --faults serialized,context_truncation --out reports/faulted; then
+            echo "faulted run passed: a detector is broken"; exit 1
+          fi
+      - name: ops review (a closed action whose test fails is reopened and fails the build)
+        run: |
+          mkdir -p reports
+          python tools/ops_review.py --out reports/ops-review.md
+          cat reports/ops-review.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports
+          path: local-inference-bench/reports/

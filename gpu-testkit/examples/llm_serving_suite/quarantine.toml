@@ -1,0 +1,8 @@
+# Every entry needs an owner and an expiry. Expired entries gate again automatically.
+
+[[quarantine]]
+test = "test_known_issues.py::test_speculative_decoding_acceptance_rate"
+owner = "@spec-decode"
+reason = "draft model acceptance drops to 0.41 at batch 64; fix in review"
+ticket = "SERVE-2207"
+expires = "2027-06-30"

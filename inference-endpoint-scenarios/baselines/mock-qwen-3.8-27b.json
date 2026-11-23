@@ -1,0 +1,15 @@
+{
+  "model": "qwen-3.8-27b",
+  "target": "mock",
+  "fingerprint": "fp_mock_v1",
+  "results": {
+    "math_mul": true,
+    "math_add": true,
+    "prime": true,
+    "sort": true,
+    "capital": true,
+    "repeat": true,
+    "extract_json": true,
+    "tool_args": true
+  }
+}

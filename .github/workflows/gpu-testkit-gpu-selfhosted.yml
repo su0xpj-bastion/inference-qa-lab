@@ -1,0 +1,50 @@
+# NOT EXECUTED IN THIS REPO. No self-hosted GPU runner is registered for it, so this workflow
+# has never run. It shows how the same flow runs on real hardware with the NVML backend:
+# discover -> audit quarantine -> run with leases/reruns -> diff vs the last main run -> bundles.
+name: gpu-testkit / gpu-selfhosted (not executed here)
+on:
+  workflow_dispatch:
+    inputs:
+      suite: {description: "pytest path", default: "examples/llm_serving_suite"}
+      workers: {description: "xdist workers (<= GPUs)", default: "8"}
+
+defaults:
+  run:
+    working-directory: gpu-testkit
+concurrency:
+  group: gpu-testkit-gpu-selfhosted-${{ github.ref }}
+  cancel-in-progress: false   # never kill a run holding GPUs mid-test; leases queue instead
+
+jobs:
+  gpu:
+    runs-on: [self-hosted, gpu, h100]
+    timeout-minutes: 120
+    env:
+      GPU_TESTKIT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+      GPU_TESTKIT_LOCK_DIR: /var/lock/gpu-testkit   # shared by every job on this host
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13"}
+      - run: python -m venv .venv && .venv/bin/pip install -e '.[dev,nvml]'
+      - name: hardware inventory (fails fast if NVML is broken)
+        run: .venv/bin/gpu-testkit hw --backend nvml
+      - run: .venv/bin/gpu-testkit quarantine examples/llm_serving_suite/quarantine.toml --fail-on-expired
+      - name: last green main run as the baseline
+        uses: actions/download-artifact@v8
+        continue-on-error: true
+        with: {name: gpu-results-main, path: gpu-testkit/baseline/}
+      - name: suite on real GPUs
+        run: >
+          .venv/bin/python -m pytest ${{ inputs.suite }} -n ${{ inputs.workers }} -rs
+          --gpu-backend=nvml --gpu-reruns=2
+          --gpu-results=reports/results.jsonl --junitxml=reports/junit.xml
+      - name: diff -> job summary
+        if: always()
+        run: |
+          base=baseline/results.jsonl
+          [ -f "$base" ] || base=examples/llm_serving_suite/baseline.jsonl
+          .venv/bin/gpu-testkit report reports/results.jsonl --base "$base" --output "$GITHUB_STEP_SUMMARY" --fail-on-new
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: "gpu-results-${{ github.ref_name }}", path: gpu-testkit/reports/}

@@ -1,0 +1,32 @@
+Successfully ran diagnostic for group.
++---------------------------+------------------------------------------------+
+| Diagnostic                | Result                                         |
++===========================+================================================+
+|-----  Metadata  ----------+------------------------------------------------|
+| DCGM Version              | 3.3.5                                          |
+| Driver Version Detected   | 535.161.08                                     |
+| GPU Device IDs Detected   | 20b5,20b5,20b5,20b5                            |
+|-----  Deployment  --------+------------------------------------------------|
+| Denylist                  | Pass                                           |
+| NVML Library              | Pass                                           |
+| CUDA Main Library         | Pass                                           |
+| Permissions and OS Blocks | Pass                                           |
+| Persistence Mode          | Pass                                           |
+| Environment Variables     | Pass                                           |
+| Page Retirement/Row Remap | Pass                                           |
+| Graphics Processes        | Pass                                           |
+| Inforom                   | Pass                                           |
++-----  Integration  -------+------------------------------------------------+
+| PCIe                      | Pass - All                                     |
++-----  Hardware  ----------+------------------------------------------------+
+| GPU Memory                | Pass - GPUs: 0, 1, 3                           |
+|                           | Fail - GPU: 2                                  |
+| Warning                   | GPU 2 Error using CUDA API cudaMemcpy Check    |
+|                           | DCGM and system logs for errors. Reset GPU.    |
+|                           | Restart DCGM. Rerun diagnostics.               |
++-----  Stress  ------------+------------------------------------------------+
+| Targeted Stress           | Pass - All                                     |
+| Targeted Power            | Skip - All                                     |
+| Memory Bandwidth          | Pass - All                                     |
+| EUD Test                  | Skip - All                                     |
++---------------------------+------------------------------------------------+

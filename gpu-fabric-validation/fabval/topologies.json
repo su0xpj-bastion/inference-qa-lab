@@ -1,0 +1,33 @@
+{
+  "_note": "Efficiencies are planning assumptions, not measurements from this repo. They line up with publicly reported nccl-tests numbers for these platforms. Recalibrate them from a golden node of your own fleet before you trust a gate built on them.",
+  "h100-sxm-8x-ndr400-ib": {
+    "description": "8x H100 SXM5, NVLink4 through NVSwitch, 8x ConnectX-7 400G NDR InfiniBand, rail-optimized (1 HCA per GPU)",
+    "gpus_per_node": 8,
+    "hcas": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3", "mlx5_4", "mlx5_5", "mlx5_6", "mlx5_7"],
+    "link_layer": "InfiniBand",
+    "nic_rate_gbps": 400,
+    "nvlink_GBps_per_gpu": 450,
+    "efficiency": {"intra_ring": 0.80, "net_ring": 0.92, "net_tree": 0.84, "net_p2p": 0.94, "alltoall": 0.80},
+    "latency_budget_us": {"sendrecv_pair": 25.0, "all_reduce_intra": 40.0}
+  },
+  "h100-sxm-8x-400g-roce": {
+    "description": "8x H100 SXM5, NVLink4 through NVSwitch, 8x ConnectX-7 400GbE RoCEv2 (lossless on priority 3, DSCP 26), rail-optimized",
+    "gpus_per_node": 8,
+    "hcas": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3", "mlx5_4", "mlx5_5", "mlx5_6", "mlx5_7"],
+    "link_layer": "Ethernet",
+    "nic_rate_gbps": 400,
+    "nvlink_GBps_per_gpu": 450,
+    "efficiency": {"intra_ring": 0.80, "net_ring": 0.90, "net_tree": 0.80, "net_p2p": 0.92, "alltoall": 0.75},
+    "latency_budget_us": {"sendrecv_pair": 30.0, "all_reduce_intra": 40.0}
+  },
+  "a100-sxm-8x-hdr200-ib": {
+    "description": "8x A100 SXM4, NVLink3 through NVSwitch, 8x ConnectX-6 200G HDR InfiniBand, rail-optimized",
+    "gpus_per_node": 8,
+    "hcas": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3", "mlx5_4", "mlx5_5", "mlx5_6", "mlx5_7"],
+    "link_layer": "InfiniBand",
+    "nic_rate_gbps": 200,
+    "nvlink_GBps_per_gpu": 300,
+    "efficiency": {"intra_ring": 0.77, "net_ring": 0.92, "net_tree": 0.84, "net_p2p": 0.94, "alltoall": 0.80},
+    "latency_budget_us": {"sendrecv_pair": 25.0, "all_reduce_intra": 40.0}
+  }
+}

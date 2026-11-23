@@ -1,0 +1,132 @@
+<?xml version="1.0" ?>
+<!DOCTYPE nvidia_smi_log SYSTEM "nvsmi_device_v11.dtd">
+<nvidia_smi_log>
+	<timestamp>Mon Mar  4 11:02:51 2024</timestamp>
+	<driver_version>470.223.02</driver_version>
+	<cuda_version>11.4</cuda_version>
+	<attached_gpus>2</attached_gpus>
+	<gpu id="00000000:1A:00.0">
+		<product_name>Tesla V100-SXM2-32GB</product_name>
+		<persistence_mode>Disabled</persistence_mode>
+		<serial>0323018012345</serial>
+		<vbios_version>88.00.80.00.04</vbios_version>
+		<pci>
+			<pci_bus_id>00000000:1A:00.0</pci_bus_id>
+			<pci_gpu_link_info>
+				<pcie_gen>
+					<max_link_gen>3</max_link_gen>
+					<current_link_gen>3</current_link_gen>
+				</pcie_gen>
+				<link_widths>
+					<max_link_width>16x</max_link_width>
+					<current_link_width>16x</current_link_width>
+				</link_widths>
+			</pci_gpu_link_info>
+		</pci>
+		<clocks_throttle_reasons>
+			<clocks_throttle_reason_gpu_idle>Active</clocks_throttle_reason_gpu_idle>
+			<clocks_throttle_reason_hw_slowdown>Active</clocks_throttle_reason_hw_slowdown>
+			<clocks_throttle_reason_hw_thermal_slowdown>Not Active</clocks_throttle_reason_hw_thermal_slowdown>
+			<clocks_throttle_reason_hw_power_brake_slowdown>Not Active</clocks_throttle_reason_hw_power_brake_slowdown>
+			<clocks_throttle_reason_sw_thermal_slowdown>Not Active</clocks_throttle_reason_sw_thermal_slowdown>
+		</clocks_throttle_reasons>
+		<ecc_mode>
+			<current_ecc>Enabled</current_ecc>
+			<pending_ecc>Enabled</pending_ecc>
+		</ecc_mode>
+		<ecc_errors>
+			<volatile>
+				<single_bit>
+					<device_memory>12</device_memory>
+					<register_file>0</register_file>
+					<total>12</total>
+				</single_bit>
+				<double_bit>
+					<device_memory>1</device_memory>
+					<register_file>0</register_file>
+					<total>1</total>
+				</double_bit>
+			</volatile>
+			<aggregate>
+				<single_bit>
+					<total>40</total>
+				</single_bit>
+				<double_bit>
+					<total>3</total>
+				</double_bit>
+			</aggregate>
+		</ecc_errors>
+		<retired_pages>
+			<multiple_single_bit_retirement>
+				<retired_count>2</retired_count>
+				<retired_pagelist>
+					<retired_page_address>0x00000000000ab123</retired_page_address>
+					<retired_page_address>0x00000000000ab456</retired_page_address>
+				</retired_pagelist>
+			</multiple_single_bit_retirement>
+			<double_bit_retirement>
+				<retired_count>1</retired_count>
+				<retired_pagelist>
+					<retired_page_address>0x0000000000077aa1</retired_page_address>
+				</retired_pagelist>
+			</double_bit_retirement>
+			<pending_retirement>Yes</pending_retirement>
+		</retired_pages>
+		<temperature>
+			<gpu_temp>41 C</gpu_temp>
+		</temperature>
+		<power_readings>
+			<power_state>P0</power_state>
+			<power_draw>56.12 W</power_draw>
+			<power_limit>300.00 W</power_limit>
+			<default_power_limit>300.00 W</default_power_limit>
+		</power_readings>
+		<max_clocks>
+			<graphics_clock>1530 MHz</graphics_clock>
+			<sm_clock>1530 MHz</sm_clock>
+			<mem_clock>877 MHz</mem_clock>
+		</max_clocks>
+	</gpu>
+	<gpu id="00000000:1C:00.0">
+		<product_name>Tesla V100-SXM2-32GB</product_name>
+		<persistence_mode>Enabled</persistence_mode>
+		<serial>0323018012346</serial>
+		<vbios_version>88.00.80.00.04</vbios_version>
+		<pci>
+			<pci_bus_id>00000000:1C:00.0</pci_bus_id>
+			<pci_gpu_link_info>
+				<pcie_gen>
+					<max_link_gen>3</max_link_gen>
+					<current_link_gen>3</current_link_gen>
+				</pcie_gen>
+				<link_widths>
+					<max_link_width>16x</max_link_width>
+					<current_link_width>16x</current_link_width>
+				</link_widths>
+			</pci_gpu_link_info>
+		</pci>
+		<ecc_mode>
+			<current_ecc>Enabled</current_ecc>
+			<pending_ecc>Disabled</pending_ecc>
+		</ecc_mode>
+		<retired_pages>
+			<multiple_single_bit_retirement>
+				<retired_count>0</retired_count>
+				<retired_pagelist>
+				</retired_pagelist>
+			</multiple_single_bit_retirement>
+			<double_bit_retirement>
+				<retired_count>0</retired_count>
+				<retired_pagelist>
+				</retired_pagelist>
+			</double_bit_retirement>
+			<pending_retirement>No</pending_retirement>
+		</retired_pages>
+		<temperature>
+			<gpu_temp>N/A</gpu_temp>
+		</temperature>
+		<power_readings>
+			<power_limit>250.00 W</power_limit>
+		</power_readings>
+	</gpu>
+</nvidia_smi_log>

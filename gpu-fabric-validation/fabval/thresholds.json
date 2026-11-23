@@ -1,0 +1,33 @@
+{
+  "_note": "Counter limits apply to a window that starts with a counter clear (perfquery -R / ethtool reset) right before the test run. A value above the limit fails the port.",
+  "gates": {
+    "busbw_pct_of_expected": 0.85,
+    "large_min_bytes": 268435456,
+    "small_max_bytes": 65536
+  },
+  "perfquery": {
+    "SymbolErrorCounter": 10,
+    "LinkErrorRecoveryCounter": 0,
+    "LinkDownedCounter": 0,
+    "PortRcvErrors": 0,
+    "PortRcvRemotePhysicalErrors": 0,
+    "LocalLinkIntegrityErrors": 0,
+    "ExcessiveBufferOverrunErrors": 0,
+    "PortXmitDiscards": 100
+  },
+  "ethtool": {
+    "rx_discards_phy": 1000,
+    "tx_discards_phy": 1000,
+    "rx_out_of_buffer": 1000,
+    "rx_crc_errors_phy": 0,
+    "rx_symbol_err_phy": 0
+  },
+  "roce": {
+    "priority": 3,
+    "gid_version": "v2",
+    "gid_family": "ipv4"
+  },
+  "topo": {
+    "allowed_gpu_nic_paths": ["PIX", "PXB"]
+  }
+}

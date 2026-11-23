@@ -1,0 +1,554 @@
+{
+  "bundle_id": "inc-0001",
+  "window": {
+    "start": "2026-11-14T10:00:00Z",
+    "duration_s": 600
+  },
+  "threshold": 0.7,
+  "verdict": "incident",
+  "root_causes": [
+    {
+      "cause": "gpu_lost",
+      "layer": "hardware",
+      "node": "gpu-node-1",
+      "gpu": 3,
+      "replica": "replica-a",
+      "rank": 11,
+      "confidence": 0.99,
+      "onset_s": 200.1,
+      "detected_at_s": 200.1,
+      "sources": [
+        "dcgm",
+        "engine",
+        "kern",
+        "nccl"
+      ],
+      "evidence": [
+        {
+          "t_s": 200.1,
+          "source": "kern",
+          "where": "nodes/gpu-node-1/kern.log:2",
+          "note": "Xid 79 (GPU has fallen off the bus) on GPU 3",
+          "line": "2026-11-14T10:03:20.100000+00:00 gpu-node-1 kernel: NVRM: Xid (PCI:0000:5d:00): 79, pid='<unknown>', name=<unknown>, GPU has fallen off the bus."
+        },
+        {
+          "t_s": 210.0,
+          "source": "dcgm",
+          "where": "nodes/gpu-node-1/dcgm.prom:1287",
+          "note": "GPU 3 disappears from DCGM while the node's other GPUs keep reporting",
+          "line": "DCGM_FI_DEV_GPU_TEMP{gpu=\"3\",UUID=\"GPU-19d3534b-ff57-61ee-44f6-f90e79048095\",pci_bus_id=\"00000000:5D:00.0\",device=\"nvidia3\",modelName=\"NVIDIA H100 80GB HBM3\",Hostname=\"gpu-node-1\",DCGM_FI_DRIVER_VERSION=\"550.90.07\"} 51 1794650595000"
+        },
+        {
+          "t_s": 260.0,
+          "source": "nccl",
+          "where": "nodes/gpu-node-1/worker.log:17",
+          "note": "1 rank(s) never reported the timeout (gpu-node-1/GPU3): the hang is on them",
+          "line": "[rank14]:[E1114 10:04:20.012987 ProcessGroupNCCL.cpp:632] [Rank 14] Watchdog caught collective operation timeout: WorkNCCL(SeqNum=48001, OpType=ALLREDUCE, NumelIn=8388608, NumelOut=8388608, Timeout(ms)=60000) ran for 60007 milliseconds before timing out."
+        },
+        {
+          "t_s": 350.0,
+          "source": "engine",
+          "where": "nodes/gpu-node-1/engine.log:3",
+          "note": "engine error consistent with gpu_lost",
+          "line": "ERROR 11-14 10:05:50 [worker_base.py:612] RuntimeError: Expected 8 visible CUDA devices for tensor_parallel_size=8, found 7"
+        },
+        {
+          "t_s": 410.0,
+          "source": "engine",
+          "where": "nodes/gpu-node-1/engine.log:4",
+          "note": "engine error consistent with gpu_lost",
+          "line": "ERROR 11-14 10:06:50 [worker_base.py:612] RuntimeError: Expected 8 visible CUDA devices for tensor_parallel_size=8, found 7"
+        },
+        {
+          "t_s": 530.0,
+          "source": "engine",
+          "where": "nodes/gpu-node-1/engine.log:5",
+          "note": "engine error consistent with gpu_lost",
+          "line": "ERROR 11-14 10:08:50 [worker_base.py:612] RuntimeError: Expected 8 visible CUDA devices for tensor_parallel_size=8, found 7"
+        }
+      ],
+      "explains": {
+        "symptoms": [
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 230.0,
+            "end_s": 260.0,
+            "worst_p99_s": 30.0,
+            "errors": 176,
+            "requests": 176,
+            "failover_from": null
+          },
+          {
+            "kind": "latency_slo",
+            "replica": "replica-a",
+            "start_s": 230.0,
+            "end_s": 270.0,
+            "worst_p99_s": 30.0,
+            "errors": 178,
+            "requests": 178,
+            "failover_from": null
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 300.0,
+            "end_s": 310.0,
+            "worst_p99_s": 0.0,
+            "errors": 4,
+            "requests": 4,
+            "failover_from": null
+          },
+          {
+            "kind": "latency_slo",
+            "replica": "replica-b",
+            "start_s": 340.0,
+            "end_s": 370.0,
+            "worst_p99_s": 21.92,
+            "errors": 0,
+            "requests": 385,
+            "failover_from": "gpu_lost@replica-a"
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 370.0,
+            "end_s": 400.0,
+            "worst_p99_s": 0.0,
+            "errors": 6,
+            "requests": 6,
+            "failover_from": null
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 420.0,
+            "end_s": 460.0,
+            "worst_p99_s": 0.0,
+            "errors": 10,
+            "requests": 10,
+            "failover_from": null
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 480.0,
+            "end_s": 500.0,
+            "worst_p99_s": 0.0,
+            "errors": 8,
+            "requests": 8,
+            "failover_from": null
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 540.0,
+            "end_s": 550.0,
+            "worst_p99_s": 0.0,
+            "errors": 3,
+            "requests": 3,
+            "failover_from": null
+          },
+          {
+            "kind": "error_burst",
+            "replica": "replica-a",
+            "start_s": 580.0,
+            "end_s": 600.0,
+            "worst_p99_s": 0.0,
+            "errors": 6,
+            "requests": 6,
+            "failover_from": null
+          }
+        ],
+        "effects": {
+          "crashloop": {
+            "count": 6,
+            "nodes": [
+              "gpu-node-0",
+              "gpu-node-1"
+            ]
+          },
+          "engine_crash": {
+            "count": 5,
+            "nodes": [
+              "gpu-node-0",
+              "gpu-node-1"
+            ]
+          },
+          "nccl_timeout": {
+            "count": 15,
+            "nodes": [
+              "gpu-node-0",
+              "gpu-node-1"
+            ]
+          }
+        }
+      },
+      "blast_radius": {
+        "replicas": [
+          "replica-a"
+        ],
+        "nodes": [
+          "gpu-node-0",
+          "gpu-node-1"
+        ],
+        "ranks": 16,
+        "requests_failed": 250,
+        "requests_slow": 0
+      },
+      "recommended_action": {
+        "action": "DRAIN_NODE",
+        "target": {
+          "node": "gpu-node-1",
+          "gpu": 3,
+          "replica": "replica-a"
+        },
+        "detail": "Cordon + drain gpu-node-1, reboot to recover GPU 3; RMA if Xid 79 recurs."
+      }
+    }
+  ],
+  "low_confidence": [],
+  "precursors": [],
+  "symptoms": [
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 230.0,
+      "end_s": 260.0,
+      "worst_p99_s": 30.0,
+      "errors": 176,
+      "requests": 176,
+      "failover_from": null
+    },
+    {
+      "kind": "latency_slo",
+      "replica": "replica-a",
+      "start_s": 230.0,
+      "end_s": 270.0,
+      "worst_p99_s": 30.0,
+      "errors": 178,
+      "requests": 178,
+      "failover_from": null
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 300.0,
+      "end_s": 310.0,
+      "worst_p99_s": 0.0,
+      "errors": 4,
+      "requests": 4,
+      "failover_from": null
+    },
+    {
+      "kind": "latency_slo",
+      "replica": "replica-b",
+      "start_s": 340.0,
+      "end_s": 370.0,
+      "worst_p99_s": 21.92,
+      "errors": 0,
+      "requests": 385,
+      "failover_from": "gpu_lost@replica-a"
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 370.0,
+      "end_s": 400.0,
+      "worst_p99_s": 0.0,
+      "errors": 6,
+      "requests": 6,
+      "failover_from": null
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 420.0,
+      "end_s": 460.0,
+      "worst_p99_s": 0.0,
+      "errors": 10,
+      "requests": 10,
+      "failover_from": null
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 480.0,
+      "end_s": 500.0,
+      "worst_p99_s": 0.0,
+      "errors": 8,
+      "requests": 8,
+      "failover_from": null
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 540.0,
+      "end_s": 550.0,
+      "worst_p99_s": 0.0,
+      "errors": 3,
+      "requests": 3,
+      "failover_from": null
+    },
+    {
+      "kind": "error_burst",
+      "replica": "replica-a",
+      "start_s": 580.0,
+      "end_s": 600.0,
+      "worst_p99_s": 0.0,
+      "errors": 6,
+      "requests": 6,
+      "failover_from": null
+    }
+  ],
+  "unexplained_symptoms": [],
+  "unexplained_effects": [],
+  "timeline": [
+    {
+      "t_s": 200.1,
+      "kind": "kern",
+      "what": "gpu_lost: Xid 79 (GPU has fallen off the bus) on GPU 3",
+      "where": "nodes/gpu-node-1/kern.log:2"
+    },
+    {
+      "t_s": 210.0,
+      "kind": "dcgm",
+      "what": "gpu_lost: GPU 3 disappears from DCGM while the node's other GPUs keep reporting",
+      "where": "nodes/gpu-node-1/dcgm.prom:1287"
+    },
+    {
+      "t_s": 230.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 30.0s, 176 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 230.0,
+      "kind": "symptom",
+      "what": "latency_slo on replica-a (p99 30.0s, 178 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 260.0,
+      "kind": "effect",
+      "what": "engine_crash on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/engine.log:22"
+    },
+    {
+      "t_s": 260.0,
+      "kind": "effect",
+      "what": "engine_crash on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/engine.log:2"
+    },
+    {
+      "t_s": 260.0,
+      "kind": "nccl",
+      "what": "gpu_lost: 1 rank(s) never reported the timeout (gpu-node-1/GPU3): the hang is on them",
+      "where": "nodes/gpu-node-1/worker.log:17"
+    },
+    {
+      "t_s": 260.0,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:17"
+    },
+    {
+      "t_s": 260.0,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:19"
+    },
+    {
+      "t_s": 260.1,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:17"
+    },
+    {
+      "t_s": 260.1,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:19"
+    },
+    {
+      "t_s": 260.1,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:21"
+    },
+    {
+      "t_s": 260.1,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:23"
+    },
+    {
+      "t_s": 260.2,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:25"
+    },
+    {
+      "t_s": 260.2,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:21"
+    },
+    {
+      "t_s": 260.2,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:23"
+    },
+    {
+      "t_s": 260.2,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:27"
+    },
+    {
+      "t_s": 260.2,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/worker.log:29"
+    },
+    {
+      "t_s": 260.4,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:25"
+    },
+    {
+      "t_s": 260.4,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:27"
+    },
+    {
+      "t_s": 260.4,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:29"
+    },
+    {
+      "t_s": 260.4,
+      "kind": "effect",
+      "what": "nccl_timeout on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-0/worker.log:31"
+    },
+    {
+      "t_s": 300.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 4 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 340.0,
+      "kind": "symptom",
+      "what": "latency_slo on replica-b (p99 21.9s, 0 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 350.0,
+      "kind": "engine",
+      "what": "gpu_lost: engine error consistent with gpu_lost",
+      "where": "nodes/gpu-node-1/engine.log:3"
+    },
+    {
+      "t_s": 350.0,
+      "kind": "effect",
+      "what": "engine_crash on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/engine.log:3"
+    },
+    {
+      "t_s": 351.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:6"
+    },
+    {
+      "t_s": 351.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:7"
+    },
+    {
+      "t_s": 370.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 6 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 410.0,
+      "kind": "engine",
+      "what": "gpu_lost: engine error consistent with gpu_lost",
+      "where": "nodes/gpu-node-1/engine.log:4"
+    },
+    {
+      "t_s": 410.0,
+      "kind": "effect",
+      "what": "engine_crash on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/engine.log:4"
+    },
+    {
+      "t_s": 411.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:8"
+    },
+    {
+      "t_s": 411.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:9"
+    },
+    {
+      "t_s": 420.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 10 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 480.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 8 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 530.0,
+      "kind": "engine",
+      "what": "gpu_lost: engine error consistent with gpu_lost",
+      "where": "nodes/gpu-node-1/engine.log:5"
+    },
+    {
+      "t_s": 530.0,
+      "kind": "effect",
+      "what": "engine_crash on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "nodes/gpu-node-1/engine.log:5"
+    },
+    {
+      "t_s": 531.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-0 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:10"
+    },
+    {
+      "t_s": 531.0,
+      "kind": "effect",
+      "what": "crashloop on gpu-node-1 <- gpu_lost@gpu-node-1",
+      "where": "k8s/events.json:11"
+    },
+    {
+      "t_s": 540.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 3 errors)",
+      "where": "router/access.log"
+    },
+    {
+      "t_s": 580.0,
+      "kind": "symptom",
+      "what": "error_burst on replica-a (p99 0.0s, 6 errors)",
+      "where": "router/access.log"
+    }
+  ]
+}

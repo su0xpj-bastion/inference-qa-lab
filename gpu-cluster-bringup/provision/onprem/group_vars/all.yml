@@ -1,0 +1,13 @@
+# Pinned to the golden manifest (manifests/golden.json). Change both together.
+nvidia_driver_branch: "550"
+nvidia_driver_version: "550.127.08-0ubuntu1"
+cuda_toolkit_package: "cuda-toolkit-12-4"
+dcgm_package: "datacenter-gpu-manager"
+rocm_version: "6.2.4"
+amdgpu_dkms_version: "6.8.5"
+kernel_version: "5.15.0-125-generic"
+doca_ofed_version: "2.9.1"
+bringup_root: /opt/inference-qa-lab/gpu-cluster-bringup
+bringup_captures: /var/lib/bringup/captures
+bringup_controller_results: "{{ playbook_dir }}/../../results/onprem"
+burnin_seconds: 14400

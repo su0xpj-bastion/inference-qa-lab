@@ -1,0 +1,22 @@
+# GitOps: ArgoCD reconciles the cluster to deploy/overlays/<env>.
+# Sync waves are not needed here; the PDB + maxUnavailable:0 make rollouts safe on their own.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: inference-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/su0xpj-bastion/inference-qa-lab.git
+    targetRevision: main
+    path: inference-platform-qa/deploy/overlays/kind
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: inference
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions: [CreateNamespace=true]
+    retry:
+      limit: 3
+      backoff: {duration: 10s, factor: 2, maxDuration: 2m}

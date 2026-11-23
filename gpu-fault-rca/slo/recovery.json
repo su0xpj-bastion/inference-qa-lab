@@ -1,0 +1,9 @@
+{
+  "_doc": "Recovery SLOs per root cause. ttd_s: detection relative to first user-visible symptom (negative = before impact). ttm_s: impact start until a clean 60 s period after the action completes. requests_lost: 5xx from fault onset to the end of that clean period.",
+  "default":            {"ttd_s": 30,  "ttm_s": 240, "requests_lost": 400},
+  "memory_leak":        {"ttd_s": 0,   "ttm_s": 60,  "requests_lost": 50},
+  "driver_mismatch":    {"ttd_s": 30,  "ttm_s": 360, "requests_lost": 400},
+  "ecc_uncorrectable":  {"ttd_s": 30,  "ttm_s": 240, "requests_lost": 150},
+  "bad_build":          {"ttd_s": 30,  "ttm_s": 180, "requests_lost": 200},
+  "nvlink_degraded":    {"ttd_s": 30,  "ttm_s": 240, "requests_lost": 400}
+}

@@ -1,0 +1,164 @@
+# Same job on the InfiniBand fabric. IB verbs need no per-pod network attachment: the RDMA
+# shared device plugin exposes the host HCAs (rdma/ib_shared) and NCCL bootstraps over eth0.
+# Prefer the same leaf/spine block: a ring that crosses the spine pays an extra hop per channel.
+apiVersion: kubeflow.org/v2beta1
+kind: MPIJob
+metadata:
+  name: nccl-tests-ib
+  namespace: fabric-validation
+  labels:
+    app.kubernetes.io/name: nccl-tests
+    kueue.x-k8s.io/queue-name: gpu-validation
+spec:
+  slotsPerWorker: 8
+  mpiImplementation: OpenMPI
+  runPolicy:
+    cleanPodPolicy: Running
+    backoffLimit: 0
+    ttlSecondsAfterFinished: 3600
+  mpiReplicaSpecs:
+    Launcher:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nccl-tests
+            app.kubernetes.io/component: launcher
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: launcher
+              image: registry.example.com/fabric/nccl-tests:2.13.11-cuda12.6
+              envFrom:
+                - configMapRef:
+                    name: nccl-env-ib
+              env:
+                - name: NCCL_SOCKET_IFNAME
+                  value: eth0
+                - name: TEST
+                  value: all_reduce_perf
+              # Ranks are started over ssh by the launcher, so they do NOT inherit the worker
+              # container's env. Every NCCL variable has to be forwarded with -x from here.
+              command:
+                - mpirun
+                - --allow-run-as-root
+                - -np
+                - "64"
+                - --bind-to
+                - none
+                - --map-by
+                - ppr:8:node
+                - --mca
+                - pml
+                - ob1
+                - --mca
+                - btl
+                - tcp,self
+                - --mca
+                - btl_tcp_if_include
+                - eth0
+                - -x
+                - NCCL_DEBUG
+                - -x
+                - NCCL_DEBUG_SUBSYS
+                - -x
+                - NCCL_IB_HCA
+                - -x
+                - NCCL_CROSS_NIC
+                - -x
+                - NCCL_NET_GDR_LEVEL
+                - -x
+                - NCCL_SOCKET_IFNAME
+                - /opt/nccl-tests/build/all_reduce_perf
+                - -b
+                - "8"
+                - -e
+                - 8G
+                - -f
+                - "2"
+                - -g
+                - "1"
+                - -c
+                - "1"
+                - -n
+                - "20"
+              resources:
+                requests:
+                  cpu: "2"
+                  memory: 4Gi
+                limits:
+                  cpu: "2"
+                  memory: 4Gi
+    Worker:
+      replicas: 8
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nccl-tests
+            app.kubernetes.io/component: worker
+          annotations:
+            kueue.x-k8s.io/podset-preferred-topology: network.topology.example.com/leaf-block
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: nvidia.com/gpu.product
+                        operator: In
+                        values: ["NVIDIA-H100-80GB-HBM3"]
+            # One worker per node: two workers on one node would share its 8 rails and halve
+            # the measured bandwidth for reasons that have nothing to do with the fabric.
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: nccl-tests
+                      app.kubernetes.io/component: worker
+                  topologyKey: kubernetes.io/hostname
+          tolerations:
+            - key: nvidia.com/gpu
+              operator: Exists
+              effect: NoSchedule
+          containers:
+            - name: worker
+              image: registry.example.com/fabric/nccl-tests:2.13.11-cuda12.6
+              envFrom:
+                - configMapRef:
+                    name: nccl-env-ib
+              env:
+                - name: NCCL_SOCKET_IFNAME
+                  value: eth0
+              securityContext:
+                capabilities:
+                  # RDMA pins (mlocks) registered memory; without IPC_LOCK, ibv_reg_mr fails
+                  # once the default 64 KiB memlock limit is hit.
+                  add: ["IPC_LOCK"]
+              resources:
+                requests:
+                  cpu: "96"
+                  memory: 512Gi
+                  hugepages-2Mi: 2Gi
+                  nvidia.com/gpu: 8
+                  rdma/ib_shared: 1
+                limits:
+                  cpu: "96"
+                  memory: 512Gi
+                  hugepages-2Mi: 2Gi
+                  nvidia.com/gpu: 8
+                  rdma/ib_shared: 1
+              volumeMounts:
+                - name: dshm
+                  mountPath: /dev/shm
+                - name: hugepages
+                  mountPath: /hugepages
+          volumes:
+            # NCCL's intra-node SHM transport and CUDA IPC handles live in /dev/shm; the
+            # container default of 64 MiB fails large collectives.
+            - name: dshm
+              emptyDir:
+                medium: Memory
+                sizeLimit: 64Gi
+            - name: hugepages
+              emptyDir:
+                medium: HugePages-2Mi

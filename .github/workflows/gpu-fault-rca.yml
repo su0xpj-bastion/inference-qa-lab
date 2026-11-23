@@ -1,0 +1,56 @@
+name: gpu-fault-rca
+on:
+  pull_request:
+    paths: ["gpu-fault-rca/**", ".github/workflows/gpu-fault-rca.yml"]
+  push: {branches: [main], paths: ["gpu-fault-rca/**", ".github/workflows/gpu-fault-rca.yml"]}
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: gpu-fault-rca
+concurrency:
+  group: gpu-fault-rca-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: unit + scenario tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-fault-rca/requirements.txt}
+      - run: pip install -r requirements.txt && pip install -e .
+      - run: python -m pytest --junitxml=reports/junit.xml
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: junit, path: gpu-fault-rca/reports/}
+
+  rca-matrix:
+    name: RCA matrix + recovery validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: gpu-fault-rca/requirements.txt}
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: precision / recall over the scenario library (gate >= 0.95)
+        run: chaos matrix --seeds 1 2 3 ${{ github.run_number }} --out reports
+      - name: recovery-path validation
+        run: chaos recover --out reports
+      - name: sample incident report
+        if: always()
+        run: |
+          chaos run gpu_fallen_off_bus --seed ${{ github.run_number }} --out bundles/sample
+          rca analyze bundles/sample --out reports/sample || true
+      - name: job summary
+        if: always()
+        run: |
+          cat reports/matrix.md reports/recovery.md >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          cat reports/sample/incident.md >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: rca-reports, path: "gpu-fault-rca/reports/\ngpu-fault-rca/bundles/sample/"}

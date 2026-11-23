@@ -1,0 +1,69 @@
+---
+# Day 0/1: bring a racked, PXE-installed node to the golden software stack.
+# Holds kernel and driver packages so unattended upgrades can't create drift.
+- name: Base OS and kernel pin
+  hosts: gpu
+  become: true
+  tasks:
+    - name: Install pinned kernel
+      ansible.builtin.apt:
+        name: "linux-image-{{ kernel_version }}"
+        state: present
+    - name: Hold kernel packages
+      ansible.builtin.command: "apt-mark hold linux-image-{{ kernel_version }}"
+      changed_when: false
+    - name: Disable unattended upgrades
+      ansible.builtin.service:
+        name: unattended-upgrades
+        state: stopped
+        enabled: false
+
+- name: NVIDIA stack
+  hosts: nvidia
+  become: true
+  tasks:
+    - name: Install pinned driver, fabric manager, DCGM
+      ansible.builtin.apt:
+        name:
+          - "nvidia-driver-{{ nvidia_driver_branch }}-server={{ nvidia_driver_version }}"
+          - "nvidia-fabricmanager-{{ nvidia_driver_branch }}={{ nvidia_driver_version }}"
+          - "{{ cuda_toolkit_package }}"
+          - "{{ dcgm_package }}"
+        state: present
+    - name: Fabric manager, persistence daemon and DCGM running
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop:
+        - nvidia-fabricmanager
+        - nvidia-persistenced
+        - nvidia-dcgm
+
+- name: AMD stack
+  hosts: amd
+  become: true
+  tasks:
+    - name: Install pinned amdgpu-dkms and ROCm
+      ansible.builtin.apt:
+        name:
+          - "amdgpu-dkms={{ amdgpu_dkms_version }}*"
+          - "rocm={{ rocm_version }}*"
+          - rocm-validation-suite
+        state: present
+
+- name: Bring-up harness on every node
+  hosts: gpu
+  become: true
+  tasks:
+    - name: Clone harness
+      ansible.builtin.git:
+        repo: https://github.com/su0xpj-bastion/inference-qa-lab
+        dest: "{{ bringup_root | dirname }}"
+        version: main
+        depth: 1
+    - name: Harness venv
+      ansible.builtin.pip:
+        requirements: "{{ bringup_root }}/requirements.txt"
+        virtualenv: "{{ bringup_root }}/.venv"
+        virtualenv_command: python3 -m venv

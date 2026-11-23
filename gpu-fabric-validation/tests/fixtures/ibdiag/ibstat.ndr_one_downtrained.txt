@@ -1,0 +1,68 @@
+CA 'mlx5_0'
+	CA type: MT4129
+	Number of ports: 1
+	Firmware version: 28.39.2048
+	Hardware version: 0
+	Node GUID: 0xa088c20300f1c3d0
+	System image GUID: 0xa088c20300f1c3d0
+	Port 1:
+		State: Active
+		Physical state: LinkUp
+		Rate: 400
+		Base lid: 412
+		LMC: 0
+		SM lid: 1
+		Capability mask: 0xa751e848
+		Port GUID: 0xa088c20300f1c3d0
+		Link layer: InfiniBand
+CA 'mlx5_1'
+	CA type: MT4129
+	Number of ports: 1
+	Firmware version: 28.39.2048
+	Hardware version: 0
+	Node GUID: 0xa088c20300f1c3d8
+	System image GUID: 0xa088c20300f1c3d8
+	Port 1:
+		State: Active
+		Physical state: LinkUp
+		Rate: 200
+		Base lid: 413
+		LMC: 0
+		SM lid: 1
+		Capability mask: 0xa751e848
+		Port GUID: 0xa088c20300f1c3d8
+		Link layer: InfiniBand
+CA 'mlx5_2'
+	CA type: MT4129
+	Number of ports: 1
+	Firmware version: 28.39.2048
+	Hardware version: 0
+	Node GUID: 0xa088c20300f1c3e0
+	System image GUID: 0xa088c20300f1c3e0
+	Port 1:
+		State: Down
+		Physical state: Polling
+		Rate: 10
+		Base lid: 65535
+		LMC: 0
+		SM lid: 0
+		Capability mask: 0xa751e848
+		Port GUID: 0xa088c20300f1c3e0
+		Link layer: InfiniBand
+CA 'mlx5_bond_0'
+	CA type: MT4125
+	Number of ports: 1
+	Firmware version: 22.39.2048
+	Hardware version: 0
+	Node GUID: 0xb83fd20300a1b2c4
+	System image GUID: 0xb83fd20300a1b2c4
+	Port 1:
+		State: Active
+		Physical state: LinkUp
+		Rate: 100
+		Base lid: 0
+		LMC: 0
+		SM lid: 0
+		Capability mask: 0x00010000
+		Port GUID: 0xba3fd2fffea1b2c4
+		Link layer: Ethernet

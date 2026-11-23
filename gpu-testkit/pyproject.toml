@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gpu-testkit"
+version = "0.1.0"
+description = "A pytest plugin and diagnostics toolkit for GPU inference test suites: hardware-aware markers, exclusive device pools, flake classification, quarantine, diagnostics bundles, and run diffs."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = ["pytest>=8.2"]
+classifiers = [
+  "Framework :: Pytest",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+nvml = ["nvidia-ml-py>=12"]
+dev = ["pytest-xdist>=3.5", "ruff>=0.6", "mypy>=1.10"]
+
+[project.entry-points.pytest11]
+gpu_testkit = "gpu_testkit.plugin"
+
+[project.scripts]
+gpu-testkit = "gpu_testkit.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gpu_testkit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p pytester -ra"
+xfail_strict = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "PT"]
+ignore = ["PT011"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src/gpu_testkit"]
+
+[[tool.mypy.overrides]]
+module = ["pynvml"]
+ignore_missing_imports = true

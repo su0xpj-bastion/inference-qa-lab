@@ -1,0 +1,13 @@
+# nThread 1 nGpus 1 minBytes 268435456 maxBytes 268435456 step: 2(factor) warmup iters: 5 iters: 20 agg iters: 1 validation: 1 graph: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid  12001 on     gpu-b1 device  0 [0x18] NVIDIA H100 80GB HBM3
+#  Rank  1 Group  0 Pid  12002 on     gpu-b1 device  1 [0x2a] NVIDIA H100 80GB HBM3
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw #wrong     time   algbw   busbw #wrong
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)            (us)  (GB/s)  (GB/s)       
+   268435456      67108864     float     sum      -1    775.3  346.23  692.46      0    774.1  346.77  693.54      0
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 693.0000 
+#

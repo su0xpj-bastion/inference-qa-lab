@@ -1,0 +1,7 @@
+# HELP DCGM_FI_DEV_GPU_TEMP GPU temperature (in C).
+# TYPE DCGM_FI_DEV_GPU_TEMP gauge
+DCGM_FI_DEV_GPU_TEMP{gpu="5",UUID="GPU-0d1e2f3a-1111-2222-3333-444455556666",pci_bus_id="00000000:BA:00.0",device="nvidia5",modelName="NVIDIA H100 80GB HBM3",Hostname="gpu-node-7",DCGM_FI_DRIVER_VERSION="550.90.07"} 91
+# HELP DCGM_FI_DEV_CLOCK_THROTTLE_REASONS Current clock throttle reasons.
+# TYPE DCGM_FI_DEV_CLOCK_THROTTLE_REASONS gauge
+DCGM_FI_DEV_CLOCK_THROTTLE_REASONS{gpu="5",UUID="GPU-0d1e2f3a-1111-2222-3333-444455556666",pci_bus_id="00000000:BA:00.0",device="nvidia5",modelName="NVIDIA H100 80GB HBM3",Hostname="gpu-node-7",DCGM_FI_DRIVER_VERSION="550.90.07"} 64
+DCGM_FI_DEV_FB_USED{gpu="5",UUID="GPU-0d1e2f3a-1111-2222-3333-444455556666",pci_bus_id="00000000:BA:00.0",device="nvidia5",modelName="NVIDIA H100 80GB HBM3",Hostname="gpu-node-7",container="engine",namespace="inference",pod="engine-b-1"} 72011 1794650400000

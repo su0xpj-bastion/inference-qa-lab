@@ -1,0 +1,1101 @@
+{
+  "verdict": "FAIL",
+  "exit_code": 1,
+  "node_type": "h100-sxm-8x-400g-roce",
+  "nodes": [
+    "node-01",
+    "node-02",
+    "node-03",
+    "node-04",
+    "node-05",
+    "node-06",
+    "node-07",
+    "node-08"
+  ],
+  "source": "simulated",
+  "stages": {
+    "node_health": {
+      "nodes": 8,
+      "nodes_failed": [
+        "node-02",
+        "node-03",
+        "node-05",
+        "node-07"
+      ]
+    },
+    "single_node": {
+      "expected_busbw": 360.0,
+      "nodes": {
+        "node-01": {
+          "peak_busbw": 360.7,
+          "pct_expected": 100.2,
+          "small_median_us": 17.8,
+          "wrong": 0
+        },
+        "node-02": {
+          "peak_busbw": 358.6,
+          "pct_expected": 99.6,
+          "small_median_us": 17.8,
+          "wrong": 0
+        },
+        "node-03": {
+          "peak_busbw": 366.1,
+          "pct_expected": 101.7,
+          "small_median_us": 17.8,
+          "wrong": 0
+        },
+        "node-04": {
+          "peak_busbw": 357.6,
+          "pct_expected": 99.3,
+          "small_median_us": 17.8,
+          "wrong": 19920
+        },
+        "node-05": {
+          "peak_busbw": 354.0,
+          "pct_expected": 98.3,
+          "small_median_us": 17.9,
+          "wrong": 0
+        },
+        "node-06": {
+          "peak_busbw": 373.6,
+          "pct_expected": 103.8,
+          "small_median_us": 17.7,
+          "wrong": 0
+        },
+        "node-07": {
+          "peak_busbw": 360.6,
+          "pct_expected": 100.2,
+          "small_median_us": 17.7,
+          "wrong": 0
+        },
+        "node-08": {
+          "peak_busbw": 361.3,
+          "pct_expected": 100.4,
+          "small_median_us": 17.8,
+          "wrong": 0
+        }
+      }
+    },
+    "pairs": {
+      "expected_busbw": 46.0,
+      "latency_budget_us": 30.0,
+      "tests": 224,
+      "bw_failed": 68,
+      "lat_failed": 62
+    },
+    "collective": {
+      "expected_busbw": 360.0,
+      "peak_busbw": 20.8,
+      "pct_expected": 5.8,
+      "avg_busbw": 9.4398,
+      "wrong": 14156,
+      "nranks": 64,
+      "nccl": {
+        "node-01": {
+          "host": "node-01",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 16,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "warnings": []
+        },
+        "node-02": {
+          "host": "node-02",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": false,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "warnings": []
+        },
+        "node-03": {
+          "host": "node-03",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "warnings": []
+        },
+        "node-04": {
+          "host": "node-04",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "warnings": []
+        },
+        "node-05": {
+          "host": "node-05",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "warnings": []
+        },
+        "node-06": {
+          "host": "node-06",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "warnings": []
+        },
+        "node-07": {
+          "host": "node-07",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "Socket"
+          ],
+          "transports": [
+            "P2P",
+            "Socket"
+          ],
+          "socket_fallback": true,
+          "gdr_by_hca": {},
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "warnings": []
+        },
+        "node-08": {
+          "host": "node-08",
+          "version": "2.23.4+cuda12.6",
+          "networks": [
+            "IB"
+          ],
+          "transports": [
+            "IB",
+            "P2P"
+          ],
+          "socket_fallback": false,
+          "gdr_by_hca": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+          },
+          "ring_channels": 0,
+          "tree_channels": 16,
+          "env": {
+            "NCCL_CROSS_NIC": "0",
+            "NCCL_DEBUG_SUBSYS": "INIT,NET,GRAPH",
+            "NCCL_IB_GID_INDEX": "3",
+            "NCCL_IB_HCA": "^=mlx5_bond_0",
+            "NCCL_IB_QPS_PER_CONNECTION": "4",
+            "NCCL_IB_TC": "106",
+            "NCCL_NET_GDR_LEVEL": "PXB",
+            "NCCL_SOCKET_IFNAME": "eth0"
+          },
+          "ranks": [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "warnings": []
+        }
+      }
+    }
+  },
+  "root_causes": [
+    {
+      "severity": "FAIL",
+      "category": "affinity",
+      "stage": "root cause",
+      "node": "node-02",
+      "hca": "mlx5_6",
+      "location": "node-02/mlx5_6",
+      "message": "NIC on the wrong NUMA node (GDR off)",
+      "evidence": [
+        "rail 6 (mlx5_6) fails the pair bandwidth gate in 7/7 tests (limit 85% of 46.0 GB/s)",
+        "GPU6 <-> NIC6 (mlx5_6) is SYS (want PIX/PXB): NIC on the wrong PCIe root / NUMA node",
+        "GPUDirect RDMA off on mlx5_6: connections run via NET/IB/6 without /GDRDMA"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "link",
+      "stage": "root cause",
+      "node": "node-03",
+      "hca": "mlx5_2",
+      "location": "node-03/mlx5_2",
+      "message": "link down-trained / port not healthy",
+      "evidence": [
+        "rail 2 (mlx5_2) fails the pair bandwidth gate in 7/7 tests (limit 85% of 46.0 GB/s)",
+        "mlx5_2 rate 200 Gb/s, expected 400 (link down-trained)"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "corruption",
+      "stage": "root cause",
+      "node": "node-04",
+      "hca": null,
+      "location": "node-04",
+      "message": "intra-node all_reduce returned wrong results (19920 elements across 5 sizes)",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "lossless",
+      "stage": "root cause",
+      "node": "node-05",
+      "hca": "mlx5_4",
+      "location": "node-05/mlx5_4",
+      "message": "RoCE lossless config (PFC/ECN) not in effect",
+      "evidence": [
+        "rail 4 (mlx5_4) fails the pair latency gate in 7/7 tests (limit 30 us)",
+        "mlx5_4 rx_discards_phy=2148331; no PFC pause frames on priority 3, no ECN marks -> lossless config (PFC/ECN) not in effect"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "root cause",
+      "node": "node-07",
+      "hca": null,
+      "location": "node-07",
+      "message": "RoCE GID index mismatch",
+      "evidence": [
+        "every rail fails the pair bandwidth gate in 56/56 tests (limit 85% of 46.0 GB/s)",
+        "NCCL fell back to TCP sockets (NET/Socket): the RDMA fabric is bypassed",
+        "mlx5_0 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_1 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_2 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_3 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_4 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_5 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_6 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+        "mlx5_7 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "FAIL",
+      "category": "affinity",
+      "stage": "node health",
+      "node": "node-02",
+      "hca": "mlx5_6",
+      "location": "node-02/mlx5_6",
+      "message": "GPU6 <-> NIC6 (mlx5_6) is SYS (want PIX/PXB): NIC on the wrong PCIe root / NUMA node",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "link",
+      "stage": "node health",
+      "node": "node-03",
+      "hca": "mlx5_2",
+      "location": "node-03/mlx5_2",
+      "message": "mlx5_2 rate 200 Gb/s, expected 400 (link down-trained)",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "counters",
+      "stage": "node health",
+      "node": "node-03",
+      "hca": "mlx5_2",
+      "location": "node-03/mlx5_2",
+      "message": "mlx5_2 physical-layer errors: rx_symbol_err_phy=312",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "lossless",
+      "stage": "node health",
+      "node": "node-05",
+      "hca": "mlx5_4",
+      "location": "node-05/mlx5_4",
+      "message": "mlx5_4 rx_discards_phy=2148331; no PFC pause frames on priority 3, no ECN marks -> lossless config (PFC/ECN) not in effect",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_0",
+      "location": "node-07/mlx5_0",
+      "message": "mlx5_0 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_1",
+      "location": "node-07/mlx5_1",
+      "message": "mlx5_1 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_2",
+      "location": "node-07/mlx5_2",
+      "message": "mlx5_2 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_3",
+      "location": "node-07/mlx5_3",
+      "message": "mlx5_3 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_4",
+      "location": "node-07/mlx5_4",
+      "message": "mlx5_4 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_5",
+      "location": "node-07/mlx5_5",
+      "message": "mlx5_5 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_6",
+      "location": "node-07/mlx5_6",
+      "message": "mlx5_6 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "gid",
+      "stage": "node health",
+      "node": "node-07",
+      "hca": "mlx5_7",
+      "location": "node-07/mlx5_7",
+      "message": "mlx5_7 GID index 3 is v2 link-local/IPv6; RoCE v2 IPv4 GID is at index 5",
+      "evidence": []
+    },
+    {
+      "severity": "FAIL",
+      "category": "corruption",
+      "stage": "single node",
+      "node": "node-04",
+      "hca": null,
+      "location": "node-04",
+      "message": "intra-node all_reduce returned wrong results (19920 elements across 5 sizes)",
+      "evidence": [
+        "#wrong > 0 at sizes [1048576, 8388608, 67108864, 536870912]..."
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "bandwidth",
+      "stage": "pairs",
+      "node": "node-02",
+      "hca": "mlx5_6",
+      "location": "node-02/mlx5_6",
+      "message": "rail 6 (mlx5_6) fails the pair bandwidth gate in 7/7 tests (limit 85% of 46.0 GB/s)",
+      "evidence": [
+        "partners: node-01, node-03, node-04, node-05, node-06, node-07...",
+        "measured: 28.9 GB/s (63%), 28.3 GB/s (62%), 29.3 GB/s (64%), 28.2 GB/s (61%)"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "bandwidth",
+      "stage": "pairs",
+      "node": "node-03",
+      "hca": "mlx5_2",
+      "location": "node-03/mlx5_2",
+      "message": "rail 2 (mlx5_2) fails the pair bandwidth gate in 7/7 tests (limit 85% of 46.0 GB/s)",
+      "evidence": [
+        "partners: node-01, node-02, node-04, node-05, node-06, node-07...",
+        "measured: 23.2 GB/s (50%), 23.9 GB/s (52%), 23.7 GB/s (52%), 24.0 GB/s (52%)"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "bandwidth",
+      "stage": "pairs",
+      "node": "node-07",
+      "hca": null,
+      "location": "node-07",
+      "message": "every rail fails the pair bandwidth gate in 56/56 tests (limit 85% of 46.0 GB/s)",
+      "evidence": [
+        "partners: node-01, node-02, node-03, node-04, node-05, node-06...",
+        "measured: 2.7 GB/s (6%), 2.6 GB/s (6%), 2.6 GB/s (6%), 2.7 GB/s (6%)"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "latency",
+      "stage": "pairs",
+      "node": "node-05",
+      "hca": "mlx5_4",
+      "location": "node-05/mlx5_4",
+      "message": "rail 4 (mlx5_4) fails the pair latency gate in 7/7 tests (limit 30 us)",
+      "evidence": [
+        "partners: node-01, node-02, node-03, node-04, node-06, node-07...",
+        "measured: 65.5 us, 69.2 us, 67.9 us, 63.9 us"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "latency",
+      "stage": "pairs",
+      "node": "node-07",
+      "hca": null,
+      "location": "node-07",
+      "message": "every rail fails the pair latency gate in 56/56 tests (limit 30 us)",
+      "evidence": [
+        "partners: node-01, node-02, node-03, node-04, node-05, node-06...",
+        "measured: 37.3 us, 36.3 us, 35.4 us, 36.2 us"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "bandwidth",
+      "stage": "full collective",
+      "node": null,
+      "hca": null,
+      "location": "cluster",
+      "message": "full all_reduce busbw 20.8 GB/s = 6% of expected 360 GB/s (8 nodes x 8 GPUs, ring)",
+      "evidence": [
+        "the slowest channel gates every rank: one bad rail anywhere caps the whole job"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "corruption",
+      "stage": "full collective",
+      "node": null,
+      "hca": null,
+      "location": "cluster",
+      "message": "full all_reduce returned wrong results (14156 elements)",
+      "evidence": [
+        "see single-node stage for the node"
+      ]
+    },
+    {
+      "severity": "WARN",
+      "category": "affinity",
+      "stage": "full collective",
+      "node": "node-02",
+      "hca": "mlx5_6",
+      "location": "node-02/mlx5_6",
+      "message": "GPUDirect RDMA off on mlx5_6: connections run via NET/IB/6 without /GDRDMA",
+      "evidence": [
+        "GPU Direct RDMA Disabled for GPU ba000 / HCA 6 (distance 7 > 4)"
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "category": "transport",
+      "stage": "full collective",
+      "node": "node-07",
+      "hca": null,
+      "location": "node-07",
+      "message": "NCCL fell back to TCP sockets (NET/Socket): the RDMA fabric is bypassed",
+      "evidence": [
+        "'NET/IB : No device found.'",
+        "networks=['Socket'] transports=['P2P', 'Socket']"
+      ]
+    }
+  ],
+  "pair_matrix": {
+    "node-01|node-02": {
+      "min_pct": 62.9,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        6
+      ],
+      "rails_lat_fail": []
+    },
+    "node-01|node-03": {
+      "min_pct": 50.4,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        2
+      ],
+      "rails_lat_fail": []
+    },
+    "node-01|node-04": {
+      "min_pct": 97.2,
+      "max_small_us": 11.0,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-01|node-05": {
+      "min_pct": 95.2,
+      "max_small_us": 65.5,
+      "rails_bw_fail": [],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-01|node-06": {
+      "min_pct": 97.5,
+      "max_small_us": 11.0,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-01|node-07": {
+      "min_pct": 5.7,
+      "max_small_us": 37.3,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-01|node-08": {
+      "min_pct": 98.6,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-02|node-03": {
+      "min_pct": 52.0,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        2,
+        6
+      ],
+      "rails_lat_fail": []
+    },
+    "node-02|node-04": {
+      "min_pct": 63.6,
+      "max_small_us": 11.0,
+      "rails_bw_fail": [
+        6
+      ],
+      "rails_lat_fail": []
+    },
+    "node-02|node-05": {
+      "min_pct": 61.2,
+      "max_small_us": 69.2,
+      "rails_bw_fail": [
+        6
+      ],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-02|node-06": {
+      "min_pct": 60.9,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        6
+      ],
+      "rails_lat_fail": []
+    },
+    "node-02|node-07": {
+      "min_pct": 5.5,
+      "max_small_us": 37.2,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-02|node-08": {
+      "min_pct": 62.8,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        6
+      ],
+      "rails_lat_fail": []
+    },
+    "node-03|node-04": {
+      "min_pct": 51.6,
+      "max_small_us": 11.0,
+      "rails_bw_fail": [
+        2
+      ],
+      "rails_lat_fail": []
+    },
+    "node-03|node-05": {
+      "min_pct": 52.1,
+      "max_small_us": 67.9,
+      "rails_bw_fail": [
+        2
+      ],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-03|node-06": {
+      "min_pct": 52.2,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [
+        2
+      ],
+      "rails_lat_fail": []
+    },
+    "node-03|node-07": {
+      "min_pct": 5.6,
+      "max_small_us": 36.5,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-03|node-08": {
+      "min_pct": 49.4,
+      "max_small_us": 11.2,
+      "rails_bw_fail": [
+        2
+      ],
+      "rails_lat_fail": []
+    },
+    "node-04|node-05": {
+      "min_pct": 94.0,
+      "max_small_us": 63.9,
+      "rails_bw_fail": [],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-04|node-06": {
+      "min_pct": 98.2,
+      "max_small_us": 11.0,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-04|node-07": {
+      "min_pct": 5.5,
+      "max_small_us": 38.2,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-04|node-08": {
+      "min_pct": 97.3,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-05|node-06": {
+      "min_pct": 89.7,
+      "max_small_us": 78.4,
+      "rails_bw_fail": [],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-05|node-07": {
+      "min_pct": 5.7,
+      "max_small_us": 37.8,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-05|node-08": {
+      "min_pct": 93.5,
+      "max_small_us": 77.2,
+      "rails_bw_fail": [],
+      "rails_lat_fail": [
+        4
+      ]
+    },
+    "node-06|node-07": {
+      "min_pct": 5.6,
+      "max_small_us": 36.5,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "node-06|node-08": {
+      "min_pct": 97.9,
+      "max_small_us": 11.1,
+      "rails_bw_fail": [],
+      "rails_lat_fail": []
+    },
+    "node-07|node-08": {
+      "min_pct": 5.5,
+      "max_small_us": 37.5,
+      "rails_bw_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rails_lat_fail": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  },
+  "errors": []
+}

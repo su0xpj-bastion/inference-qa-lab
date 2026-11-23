@@ -1,0 +1,28 @@
+# Generated from launch/nccl-roce.env and kept in sync by tests/unit/test_launchers.py:
+#   kubectl create configmap nccl-env-roce --from-env-file=launch/nccl-roce.env --dry-run=client -o yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nccl-env-roce
+  namespace: fabric-validation
+data:
+  NCCL_DEBUG: "INFO"
+  NCCL_DEBUG_SUBSYS: "INIT,NET,GRAPH"
+  NCCL_IB_HCA: "^=mlx5_bond_0"
+  NCCL_IB_GID_INDEX: "3"
+  NCCL_IB_TC: "106"
+  NCCL_IB_QPS_PER_CONNECTION: "4"
+  NCCL_CROSS_NIC: "0"
+  NCCL_NET_GDR_LEVEL: "PXB"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nccl-env-ib
+  namespace: fabric-validation
+data:
+  NCCL_DEBUG: "INFO"
+  NCCL_DEBUG_SUBSYS: "INIT,NET,GRAPH"
+  NCCL_IB_HCA: "^=mlx5_bond_0"
+  NCCL_CROSS_NIC: "0"
+  NCCL_NET_GDR_LEVEL: "PXB"

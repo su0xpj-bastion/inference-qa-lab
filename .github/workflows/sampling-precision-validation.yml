@@ -1,0 +1,32 @@
+name: sampling-precision-validation
+on:
+  pull_request:
+    paths: ["sampling-precision-validation/**", ".github/workflows/sampling-precision-validation.yml"]
+  push: {branches: [main], paths: ["sampling-precision-validation/**", ".github/workflows/sampling-precision-validation.yml"]}
+
+defaults:
+  run:
+    working-directory: sampling-precision-validation
+concurrency:
+  group: sampling-precision-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: sampling-precision-validation/requirements.txt}
+      - run: pip install -r requirements.txt
+      - run: python -m pytest --junitxml=reports/junit.xml
+      - name: sampler audit + precision gate report (fails if any expectation flips)
+        run: python -m spv report --out reports > /dev/null
+      - if: always()
+        run: cat reports/report.md >> "$GITHUB_STEP_SUMMARY" || true
+      - name: sampler throughput (informational)
+        run: python -m spv bench --steps 5 | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: {name: reports, path: sampling-precision-validation/reports/}
